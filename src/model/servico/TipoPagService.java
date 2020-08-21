@@ -22,4 +22,8 @@ public class TipoPagService {
 			dao.atualizar(obj);
 		}
 	}
+	
+	public void excluir (TipoPag obj) {
+		dao.excluirPorId(obj.getId());
+	}
 }
