@@ -16,6 +16,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import model.entidade.TipoPag;
 import model.servico.TipoPagService;
 
 public class MainViewController implements Initializable {
@@ -36,7 +37,8 @@ public class MainViewController implements Initializable {
 
 	@FXML
 	public void onMenuItemNovo() {
-		carregarView("/gui/LancamentoView.fxml", x -> {});
+		carregarView("/gui/LancamentoView.fxml", x -> {
+		});
 	}
 
 	@FXML
@@ -72,19 +74,27 @@ public class MainViewController implements Initializable {
 		}
 	}
 
-	/*
-	 * / CARREGA VIEW 2 private synchronized void carregarView2(String
-	 * caminhoDaView) { try { FXMLLoader loader = new
-	 * FXMLLoader(getClass().getResource(caminhoDaView)); VBox novoVBox =
-	 * loader.load();
-	 * 
-	 * Scene mainScene = Main.pegarMainScene(); VBox mainVBox = (VBox) ((ScrollPane)
-	 * mainScene.getRoot()).getContent();
-	 * 
-	 * Node mainMenu = mainVBox.getChildren().get(0);
-	 * mainVBox.getChildren().clear(); mainVBox.getChildren().add(mainMenu);
-	 * mainVBox.getChildren().addAll(novoVBox); } catch(IOException ex) {
-	 * Alertas.mostrarAlerta("IO Exception", "Erro ao carregar a tela.",
-	 * ex.getMessage(), AlertType.ERROR); } }
-	 */
+	/*/ CARREGA VIEW 2
+	private  void carregarView2(TipoPag obj, String caminhoDaView) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(caminhoDaView));
+			VBox novoVBox = loader.load();
+			
+			
+			TipoPagController controller = loader.getController();
+			controller.setTipoPag(obj);
+			controller.carregarCamposDeCadastro();
+
+			Scene mainScene = Main.pegarMainScene();
+			VBox mainVBox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent();
+
+			Node mainMenu = mainVBox.getChildren().get(0);
+			mainVBox.getChildren().clear();
+			mainVBox.getChildren().add(mainMenu);
+			mainVBox.getChildren().addAll(novoVBox);
+		} catch (IOException ex) {
+			Alertas.mostrarAlerta("IO Exception", "Erro ao carregar a tela.", ex.getMessage(), AlertType.ERROR);
+		}
+	}*/
+
 }

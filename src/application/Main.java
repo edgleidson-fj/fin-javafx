@@ -23,6 +23,7 @@ public class Main extends Application {
 			mainScene = new Scene(scrollPane);
 			primaryStage.setScene(mainScene);
 			primaryStage.setTitle("Gerenciador de despesas");
+			primaryStage.setResizable(false);
 			primaryStage.show();
 		} 
 		catch(Exception ex) {

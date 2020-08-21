@@ -13,4 +13,13 @@ public class TipoPagService {
 	public List<TipoPag> buscarTodos(){
 		return dao.buscarTudo();
 	}
+	
+	public void salvarOuAtualizar(TipoPag obj) {
+		if(obj.getId() == null) {
+			dao.inserir(obj);
+			}
+		else {
+			dao.atualizar(obj);
+		}
+	}
 }
