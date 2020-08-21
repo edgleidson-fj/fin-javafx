@@ -30,10 +30,10 @@
          <children>
             <TableView fx:id="tableViewTipoPagamento" prefHeight="177.0" prefWidth="527.0">
               <columns>
-                <TableColumn prefWidth="45.0" text="Excluir" />
-                  <TableColumn prefWidth="51.0" text="Editar" />
-                  <TableColumn fx:id="tableColumnID" prefWidth="36.0" text="ID" />
-                  <TableColumn fx:id="tableColumnNome" maxWidth="1.7976931348623157E308" prefWidth="287.0" text="TIPO" />
+                <TableColumn prefWidth="45.0" text="x" />
+                  <TableColumn prefWidth="51.0" text="!" />
+                  <TableColumn fx:id="tableColumnID" prefWidth="36.0" />
+                  <TableColumn fx:id="tableColumnNome" maxWidth="1.7976931348623157E308" prefWidth="287.0" />
               </columns>
                <padding>
                   <Insets bottom="1.0" />
