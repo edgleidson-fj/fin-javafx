@@ -22,6 +22,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -99,22 +100,21 @@ public class TipoPagController implements Initializable/*, DataChangerListener*/
 		try {
 			entidade = dadosDoCampoDeTexto();
 			service.salvarOuAtualizar(entidade);
-			carregarView("/gui/TipoPagView.fxml", (TipoPagController controller) -> {
-				controller.setTipoPagService(new TipoPagService());
-				controller.carregarTableView();
-			});
+			carregarView2(entidade, "/gui/TipoPagView.fxml");
 		} catch (BDException ex) {
 			Alertas.mostrarAlerta("Erro ao salvar objeto", null, ex.getMessage(), AlertType.ERROR);
 		}
 	}
 
 	public void onBtCancelar() {
+		entidade = null;
+		carregarView2(entidade, "/gui/TipoPagView.fxml");
 	}
 
 	private void criarBotaoEditar() {
 		tableColumnEditar.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
 		tableColumnEditar.setCellFactory(param -> new TableCell<TipoPag, TipoPag>() {
-			private final Button botao = new Button("Editar");
+			private final Button botao = new Button("!");
 
 			@Override
 			protected void updateItem(TipoPag obj, boolean vazio) {
@@ -132,7 +132,7 @@ public class TipoPagController implements Initializable/*, DataChangerListener*/
 	private void criarBotaoExcluir() {
 		tableColumnExcluir.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
 		tableColumnExcluir.setCellFactory(param -> new TableCell<TipoPag, TipoPag>() {
-			private final Button button = new Button("Excluir");
+			private final Button button = new Button("x");
 
 			@Override
 			protected void updateItem(TipoPag obj, boolean vazio) {
@@ -168,7 +168,7 @@ public class TipoPagController implements Initializable/*, DataChangerListener*/
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		inicializarComportamento();
-	}
+		}
 
 	private void inicializarComportamento() {
 		tableColumnID.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -184,7 +184,7 @@ public class TipoPagController implements Initializable/*, DataChangerListener*/
 
 	public void carregarTableView() {
 		if (service == null) {
-			throw new IllegalStateException("Service nulo");
+			throw new IllegalStateException("Service nulo === carregarTableView");
 		}
 		List<TipoPag> lista = service.buscarTodos();
 		obsLista = FXCollections.observableArrayList(lista);
@@ -205,28 +205,6 @@ public class TipoPagController implements Initializable/*, DataChangerListener*/
 		txtId.setText(String.valueOf(entidade.getId()));
 		txtNome.setText(entidade.getNome());
 	}
-
-	private synchronized <T> void carregarView(String caminhoDaView, Consumer<T> acaoDeInicializacao) {
-		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource(caminhoDaView));
-			VBox novoVBox = loader.load();
-
-			Scene mainScene = Main.pegarMainScene();
-			VBox mainVBox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent();
-
-			Node mainMenu = mainVBox.getChildren().get(0);
-			mainVBox.getChildren().clear();
-			mainVBox.getChildren().add(mainMenu);
-			mainVBox.getChildren().addAll(novoVBox);
-
-			// Pegando segundo parametro dos onMenuItem()
-			T controller = loader.getController();
-			acaoDeInicializacao.accept(controller);
-		} catch (IOException ex) {
-			Alertas.mostrarAlerta("IO Exception", "Erro ao carregar a tela.", ex.getMessage(), AlertType.ERROR);
-		}
-	}
-
 	
 	private  void carregarView2(TipoPag obj, String caminhoDaView) {
 		try {
@@ -236,8 +214,9 @@ public class TipoPagController implements Initializable/*, DataChangerListener*/
 			TipoPagController controller = loader.getController();
 			controller.setTipoPag(obj);
 			controller.carregarCamposDeCadastro();
-			//controller.carregarTableView();
-
+			controller.setTipoPagService(new TipoPagService());
+			controller.carregarTableView();
+			        	
 			Scene mainScene = Main.pegarMainScene();
 			VBox mainVBox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent();
 
