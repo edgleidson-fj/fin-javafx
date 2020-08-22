@@ -107,7 +107,7 @@ public class TipoPagController implements Initializable/*, DataChangerListener*/
 	}
 
 	public void onBtCancelar() {
-		entidade = null;
+		entidade = new TipoPag();
 		carregarView2(entidade, "/gui/TipoPagView.fxml");
 	}
 
