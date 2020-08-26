@@ -30,12 +30,12 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 			ps = connection.prepareStatement(
 					"INSERT INTO lancamento "
 			//			+ "(referencia, tipopag_id) "
-						+ "(referencia) "
-			//				+ "VALUES  (?, ?) ",
-						+ "VALUES  (?) ",
+						+ "(referencia, total) "
+							+ "VALUES  (?, ?) ",
 							Statement.RETURN_GENERATED_KEYS);
 
 			ps.setString(1, obj.getReferencia());
+			ps.setDouble(2, obj.getTotal());
 	//		ps.setInt(2, obj.getTipoPagamento().getId());
 			//forma de pagamento
 			int linhasAfetadas = ps.executeUpdate();
@@ -61,8 +61,9 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 	public void atualizar(Lancamento obj) {
 		PreparedStatement ps = null;
 		try {
-			ps = connection.prepareStatement("UPDATE despesa2 " + "SET nome = ? " + "WHERE Id = ? ");
-			ps.setString(1, obj.getReferencia());
+			ps = connection.prepareStatement("UPDATE lancamento " + "SET total = ? " + "WHERE Id = ? ");
+			//ps.setString(1, obj.getReferencia());
+			ps.setDouble(1, obj.getTotal());
 			ps.setInt(2, obj.getId());
 			ps.executeUpdate();
 		} catch (SQLException ex) {

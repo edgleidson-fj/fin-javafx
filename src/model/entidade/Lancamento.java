@@ -8,18 +8,18 @@ public class Lancamento implements Serializable{
 	private Integer id;
 	private String referencia;
 	private TipoPag tipoPagamento;
+	private Double total;
 	//Status
 	
 	public Lancamento() {
 		}
 	
-	
-
-	public Lancamento(Integer id, String referencia, TipoPag tipoPagamento) {
+	public Lancamento(Integer id, String referencia, TipoPag tipoPagamento, Double total) {
 		super();
 		this.id = id;
 		this.referencia = referencia;
 		this.tipoPagamento = tipoPagamento;
+		this.total = total;
 	}
 
 
@@ -56,6 +56,16 @@ public class Lancamento implements Serializable{
 
 	public void setTipoPagamento(TipoPag tipoPagamento) {
 		this.tipoPagamento = tipoPagamento;
+	}
+
+	public Double getTotal() {
+		return total;
+	}
+
+
+
+	public void setTotal(Double total) {
+		this.total = total;
 	}
 
 
