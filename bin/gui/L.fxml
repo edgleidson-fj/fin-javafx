@@ -42,5 +42,6 @@
             <Button fx:id="btCriarRegistroDeLancamento" mnemonicParsing="false" onAction="#onBtCriarRegistroDeLancamento" text="Criar Registro de Lançamento" GridPane.columnIndex="1" GridPane.rowIndex="4" />
          </children>
       </GridPane>
+      <TextField fx:id="txtTotal" />
    </children>
 </VBox>

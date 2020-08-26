@@ -46,6 +46,8 @@ public class LController implements Initializable{
 	@FXML
 	private TextField txtPreco;
 	@FXML
+	private TextField txtTotal;
+	@FXML
 	private Button btItem;
 	@FXML
 	private Button btCriarRegistroDeLancamento;
@@ -58,6 +60,8 @@ public class LController implements Initializable{
 		lancamentoService.salvar(obj);
 		txtId.setText(String.valueOf(obj.getId()));
 	}
+	
+	double total;
 	
 	@FXML
 	public void onBtItemAction(ActionEvent evento) {
@@ -79,6 +83,10 @@ public class LController implements Initializable{
 		desp.setNome(txtItem.getText());
 		desp.setPreco(Utils.stringParaDouble(txtPreco.getText()));
 		despesaService.salvarOuAtualizar(desp);
+				
+		total += desp.getPreco();
+		System.out.println("Total "+total);
+		txtTotal.setText(""+total);
 					
 		//Item
 		item.setLancamento(obj);
