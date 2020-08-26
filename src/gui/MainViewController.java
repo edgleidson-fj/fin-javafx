@@ -16,7 +16,12 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
-import model.entidade.TipoPag;
+import model.entidade.Despesa;
+import model.entidade.Item;
+import model.entidade.Lancamento;
+import model.servico.DespesaService;
+import model.servico.ItemService;
+import model.servico.LancamentoService;
 import model.servico.TipoPagService;
 
 public class MainViewController implements Initializable {
@@ -32,12 +37,18 @@ public class MainViewController implements Initializable {
 
 	@FXML
 	public void onMenuItemSair() {
-		System.out.println("Sair()");
-	}
+		
+		}
 
 	@FXML
 	public void onMenuItemNovo() {
-		carregarView("/gui/LancamentoView.fxml", x -> {
+		carregarView("/gui/L.fxml", (LController controller) -> {
+			controller.setLancamentoService(new LancamentoService());
+			controller.setLancamento(new Lancamento());
+			controller.setDespesaService(new DespesaService());
+			controller.setDespesa(new Despesa());
+			controller.setItemService(new ItemService());
+			controller.setItem(new Item());
 		});
 	}
 

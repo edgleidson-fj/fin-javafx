@@ -2,16 +2,13 @@ package gui;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.function.Consumer;
 
 import application.Main;
 import bd.BDException;
 import bd.BDIntegrityException;
-import gui.listeners.DataChangerListener;
 import gui.util.Alertas;
 import gui.util.Restricoes;
 import gui.util.Utils;
@@ -22,7 +19,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -43,7 +39,7 @@ public class TipoPagController implements Initializable/*, DataChangerListener*/
 	private TipoPagService service;
 	private TipoPag entidade;
 	private ObservableList<TipoPag> obsLista;
-	private List<DataChangerListener> dataChangeListeners = new ArrayList<>();
+	//private List<DataChangerListener> dataChangeListeners = new ArrayList<>();
 
 	@FXML
 	private TextField txtId;
@@ -100,7 +96,7 @@ public class TipoPagController implements Initializable/*, DataChangerListener*/
 		try {
 			entidade = dadosDoCampoDeTexto();
 			service.salvarOuAtualizar(entidade);
-			carregarView2(entidade, "/gui/TipoPagView.fxml");
+			atualizarPropriaView(entidade, "/gui/TipoPagView.fxml");
 		} catch (BDException ex) {
 			Alertas.mostrarAlerta("Erro ao salvar objeto", null, ex.getMessage(), AlertType.ERROR);
 		}
@@ -108,7 +104,7 @@ public class TipoPagController implements Initializable/*, DataChangerListener*/
 
 	public void onBtCancelar() {
 		entidade = new TipoPag();
-		carregarView2(entidade, "/gui/TipoPagView.fxml");
+		atualizarPropriaView(entidade, "/gui/TipoPagView.fxml");
 	}
 
 	private void criarBotaoEditar() {
@@ -124,7 +120,7 @@ public class TipoPagController implements Initializable/*, DataChangerListener*/
 					return;
 				}
 				setGraphic(botao);
-				botao.setOnAction(evento -> carregarView2(obj, "/gui/TipoPagView.fxml"));
+				botao.setOnAction(evento -> atualizarPropriaView(obj, "/gui/TipoPagView.fxml"));
 			}			
 		});
 	}
@@ -184,7 +180,7 @@ public class TipoPagController implements Initializable/*, DataChangerListener*/
 
 	public void carregarTableView() {
 		if (service == null) {
-			throw new IllegalStateException("Service nulo === carregarTableView");
+			throw new IllegalStateException("Service nulo");
 		}
 		List<TipoPag> lista = service.buscarTodos();
 		obsLista = FXCollections.observableArrayList(lista);
@@ -206,7 +202,7 @@ public class TipoPagController implements Initializable/*, DataChangerListener*/
 		txtNome.setText(entidade.getNome());
 	}
 	
-	private  void carregarView2(TipoPag obj, String caminhoDaView) {
+	private  void atualizarPropriaView(TipoPag obj, String caminhoDaView) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(caminhoDaView));
 			VBox novoVBox = loader.load();			

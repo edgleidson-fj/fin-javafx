@@ -1,16 +1,27 @@
 package model.dao;
 
 import bd.BD;
+import model.dao.implementacao.DespesaDaoJDBC;
+import model.dao.implementacao.ItemDaoJDBC;
+import model.dao.implementacao.LancamentoDaoJDBC;
 import model.dao.implementacao.TipoPagDaoJDBC;
-import model.dao.implementacao.VendedorDaoJDBC;
 
 public class DaoFactory {
 
-	public static VendedorDao criarVendedorDao() {
-		return new VendedorDaoJDBC(BD.abrirConexao());
-	}
 	
 	public static TipoPagDao criarTipoPagDao() {
 		return new TipoPagDaoJDBC(BD.abrirConexao());
+	}
+	
+	public static DespesaDao criarDespesaDao() {
+		return new DespesaDaoJDBC(BD.abrirConexao());
+	}
+	
+	public static ItemDao criarItemDao() {
+		return new ItemDaoJDBC(BD.abrirConexao());
+	}
+	
+	public static LancamentoDao criarLancamentoDao() {
+		return new LancamentoDaoJDBC(BD.abrirConexao());
 	}
 }
