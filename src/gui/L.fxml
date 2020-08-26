@@ -39,6 +39,7 @@
             <TextField fx:id="txtReferencia" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="txtItem" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField fx:id="txtPreco" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Button fx:id="btCriarRegistroDeLancamento" mnemonicParsing="false" onAction="#onBtCriarRegistroDeLancamento" text="Criar Registro de Lançamento" GridPane.columnIndex="1" GridPane.rowIndex="4" />
          </children>
       </GridPane>
    </children>

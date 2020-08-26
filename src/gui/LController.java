@@ -47,46 +47,19 @@ public class LController implements Initializable{
 	private TextField txtPreco;
 	@FXML
 	private Button btItem;
+	@FXML
+	private Button btCriarRegistroDeLancamento;
 	
-	/*@FXML
-	public void onBtItemAction(ActionEvent evento) {
-		Stage parentStage = Utils.stageAtual(evento);
-		
+	@FXML
+	public void onBtCriarRegistroDeLancamento(ActionEvent evento) {
+		Stage parentStage = Utils.stageAtual(evento);		
 		Lancamento obj = new Lancamento();
-		Despesa desp = new Despesa();
-		Item item = new Item();
-		
-		//Lancamento
 		obj.setReferencia(txtReferencia.getText());
-		TipoPag pag = new TipoPag(2, null);
-		obj.setTipoPagamento(pag);
 		lancamentoService.salvar(obj);
-
 		txtId.setText(String.valueOf(obj.getId()));
-		
-		//Despesa
-		desp.setId(Utils.stringParaInteiro(txtId.getText()));
-		desp.setNome(txtItem.getText());
-		desp.setPreco(Utils.stringParaDouble(txtPreco.getText()));
-		//Despesa d = new Despesa(1, "ProdutoTeste", 100.0);
-		despesaService.salvarOuAtualizar(desp);
-		System.out.println("ID "+desp.getId());
-		System.out.println("Preço "+desp.getPreco());
-		
-		
-		//Item
-		item.setLancamento(obj);
-		item.setDespesa(desp);
-		itemService.salvarOuAtualizar(item);
-		System.out.println("ID "+item.getLancamento());
-		System.out.println("ID "+item.getDespesa());
-		
-		
-		//lancamentoService.salvar(obj);
-		
-		//criarDialogForm(obj, "/gui/ItemDialgoFormView.fxml", parentStage);
-	}*/	
+	}
 	
+	@FXML
 	public void onBtItemAction(ActionEvent evento) {
 		Stage parentStage = Utils.stageAtual(evento);
 		
@@ -95,35 +68,27 @@ public class LController implements Initializable{
 		Item item = new Item();
 		
 		//Lancamento
+		obj.setId(Utils.stringParaInteiro(txtId.getText()));
 		obj.setReferencia(txtReferencia.getText());
-		TipoPag pag = new TipoPag(2, null);
+		TipoPag pag = new TipoPag(null, null);
 		obj.setTipoPagamento(pag);
-		lancamentoService.salvar(obj);
-
-		//txtId.setText(String.valueOf(obj.getId()));
-		
+		lancamentoService.atualizar(obj);
+		txtId.setText(String.valueOf(obj.getId()));
+	
 		//Despesa
-	//	desp.setId(Utils.stringParaInteiro(txtId.getText()));
 		desp.setNome(txtItem.getText());
 		desp.setPreco(Utils.stringParaDouble(txtPreco.getText()));
-		//Despesa d = new Despesa(1, "ProdutoTeste", 100.0);
 		despesaService.salvarOuAtualizar(desp);
-		System.out.println("ID "+desp.getId());
-		System.out.println("Preço "+desp.getPreco());
-		
-		
+					
 		//Item
 		item.setLancamento(obj);
 		item.setDespesa(desp);
-		itemService.salvarOuAtualizar(item);
-		System.out.println("ID "+item.getLancamento());
-		System.out.println("ID "+item.getDespesa());
+		itemService.salvarOuAtualizar(item);		
 		
-		
-		//lancamentoService.salvar(obj);
-		
-		//criarDialogForm(obj, "/gui/ItemDialgoFormView.fxml", parentStage);
-	}
+		//Limpando os campos
+		txtItem.setText("");
+		txtPreco.setText(String.valueOf(0));
+		}
 	//------------------------------------------------------------------
 	
 		public void setLancamentoService(LancamentoService lancamentoService) {
