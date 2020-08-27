@@ -2,6 +2,8 @@ package model.entidade;
 
 import java.io.Serializable;
 
+import model.entidade.Status;
+
 public class Lancamento implements Serializable{
 	private static final long serialVersionUID = 1L;
 
@@ -9,50 +11,39 @@ public class Lancamento implements Serializable{
 	private String referencia;
 	private TipoPag tipoPagamento;
 	private Double total;
-	//Status
+	private Status status;
 	
 	public Lancamento() {
 		}
 	
-	public Lancamento(Integer id, String referencia, TipoPag tipoPagamento, Double total) {
+	public Lancamento(Integer id, String referencia, TipoPag tipoPagamento, Double total, Status status) {
 		super();
 		this.id = id;
 		this.referencia = referencia;
 		this.tipoPagamento = tipoPagamento;
 		this.total = total;
+		this.status = status;
 	}
-
-
 
 	public Integer getId() {
 		return id;
 	}
 
-
-
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
-
 
 	public String getReferencia() {
 		return referencia;
 	}
 
-
-
 	public void setReferencia(String referencia) {
 		this.referencia = referencia;
 	}
 
-
-
 	public TipoPag getTipoPagamento() {
 		return tipoPagamento;
 	}
-
-
 
 	public void setTipoPagamento(TipoPag tipoPagamento) {
 		this.tipoPagamento = tipoPagamento;
@@ -62,13 +53,17 @@ public class Lancamento implements Serializable{
 		return total;
 	}
 
-
-
 	public void setTotal(Double total) {
 		this.total = total;
 	}
 
+	public Status getStatus() {
+		return status;
+	}
 
+	public void setStatus(Status status) {
+		this.status = status;
+	}
 
 	@Override
 	public int hashCode() {

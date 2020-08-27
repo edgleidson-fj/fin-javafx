@@ -2,11 +2,15 @@ package gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+
 
 import application.Main;
 import gui.util.Alertas;
 import gui.util.Utils;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,18 +19,24 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import model.entidade.Despesa;
 import model.entidade.Item;
 import model.entidade.Lancamento;
 import model.entidade.TipoPag;
+import model.entidade.Status;
 import model.servico.DespesaService;
 import model.servico.ItemService;
 import model.servico.LancamentoService;
+import model.servico.StatusService;
+import model.servico.TipoPagService;
 
 public class LController implements Initializable{
 
@@ -36,6 +46,10 @@ public class LController implements Initializable{
 	private Item itemEntidade;
 	private DespesaService despesaService;
 	private Despesa despesaEntidade;
+	private TipoPagService tipoPagService;
+	private TipoPag tipoPagEntidade;
+	private StatusService statusService;
+	private Status statusEntidade;
 	//----------------------------------------------------------------
 	
 	@FXML
@@ -49,10 +63,17 @@ public class LController implements Initializable{
 	@FXML
 	private TextField txtTotal;
 	@FXML
-	private Button btItem;
+	private ComboBox<TipoPag> cmbTipoPag;
 	@FXML
-	
+	private ComboBox<Status> cmbStatus;
+	@FXML
+	private Button btItem;
+	@FXML	
 	private Button btCriarRegistroDeLancamento;
+	//--------------------------------------------------------
+	private ObservableList<TipoPag> obsListaTipoPag;
+	private ObservableList<Status> obsListaStatus;	
+	//---------------------------------------------------------
 	
 	double total;
 	@FXML
@@ -65,9 +86,7 @@ public class LController implements Initializable{
 		lancamentoService.salvar(obj);
 		txtId.setText(String.valueOf(obj.getId()));
 	}
-	
-	
-	
+		
 	@FXML
 	public void onBtItemAction(ActionEvent evento) {
 		Stage parentStage = Utils.stageAtual(evento);
@@ -75,14 +94,22 @@ public class LController implements Initializable{
 		Lancamento obj = new Lancamento();
 		Despesa desp = new Despesa();
 		Item item = new Item();
-				
+						
+//		cmbStatus.setValue(lancamentoEntidade.getStatus());
+//		cmbTipoPag.setValue(lancamentoEntidade.getTipoPagamento());
+		
 		//Lancamento
 		txtTotal.setText(String.valueOf(obj.getTotal()));
 		obj.setId(Utils.stringParaInteiro(txtId.getText()));
 		obj.setReferencia(txtReferencia.getText());
 		obj.setTotal((total));
-		TipoPag pag = new TipoPag(null, null);
-		obj.setTipoPagamento(pag);
+		
+//	obj.setStatus(cmbStatus.getValue());		
+//	obj.setTipoPagamento(cmbTipoPag.getValue());
+		obj.setStatus(cmbStatus.getValue());
+		obj.setTipoPagamento(cmbTipoPag.getValue());
+		
+		
 		lancamentoService.atualizar(obj);
 		txtId.setText(String.valueOf(obj.getId()));
 	
@@ -132,10 +159,27 @@ public class LController implements Initializable{
 		public void setDespesa(Despesa despesaEntidade) {
 			this.despesaEntidade = despesaEntidade;
 		}
+		
+		public void setTipoPagService(TipoPagService tipoPagService) {
+			this.tipoPagService = tipoPagService;
+		}
+		
+		public void setTipoPag(TipoPag tipoPagEntidade) {
+			this.tipoPagEntidade = tipoPagEntidade;
+		}
+		
+		public void setStatusService(StatusService statusService) {
+			this.statusService = statusService;
+		}
+		
+		public void setStatus(Status tipoPagEntidade) {
+			this.statusEntidade = statusEntidade;
+		}
 		//-----------------------------------------------------------------
 		@Override
 		public void initialize(URL url, ResourceBundle rb) {
-			// TODO Auto-generated method stub		
+			initializeComboBoxTipoPag();
+			initializeComboBoxStatus();
 		}	
 		//------------------------------------------------------------------
 		public void carregarCamposDeCadastro() {
@@ -164,5 +208,40 @@ public class LController implements Initializable{
 			} catch (IOException ex) {
 				Alertas.mostrarAlerta("IO Exception", "Erro ao carregar a tela.", ex.getMessage(), AlertType.ERROR);
 			}
+		}		
+		//-----------------------------------------------------------------
+
+		public void loadAssociatedObjects() {
+			List<TipoPag> listaTipoPag = tipoPagService.buscarTodos();
+			obsListaTipoPag = FXCollections.observableArrayList(listaTipoPag);
+			cmbTipoPag.setItems(obsListaTipoPag);
+			
+			List<Status> listaStatus = statusService.buscarTodos();
+			obsListaStatus = FXCollections.observableArrayList(listaStatus);
+			cmbStatus.setItems(obsListaStatus);		
+		}
+		
+		private void initializeComboBoxTipoPag() {
+			Callback<ListView<TipoPag>, ListCell<TipoPag>> factory = lv -> new ListCell<TipoPag>() {
+				@Override
+				protected void updateItem(TipoPag item, boolean empty) {
+					super.updateItem(item, empty);
+					setText(empty ? "" : item.getNome());
+				}
+			};
+			cmbTipoPag.setCellFactory(factory);
+			cmbTipoPag.setButtonCell(factory.call(null));
+		}
+		
+		private void initializeComboBoxStatus() {
+			Callback<ListView<Status>, ListCell<Status>> factory = lv -> new ListCell<Status>() {
+				@Override
+				protected void updateItem(Status item, boolean empty) {
+					super.updateItem(item, empty);
+					setText(empty ? "" : item.getNome());
+				}
+			};
+			cmbStatus.setCellFactory(factory);
+			cmbStatus.setButtonCell(factory.call(null));
 		}
 }

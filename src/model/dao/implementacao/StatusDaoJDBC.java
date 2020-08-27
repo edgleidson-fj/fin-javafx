@@ -11,32 +11,29 @@ import java.util.List;
 import bd.BD;
 import bd.BDException;
 import bd.BDIntegrityException;
-import model.dao.LancamentoDao;
-import model.entidade.Lancamento;
+import model.dao.StatusDao;
+import model.entidade.Status;
 
-public class LancamentoDaoJDBC implements LancamentoDao {
+public class StatusDaoJDBC implements StatusDao {
 
 	private Connection connection;
 
 	// Força injeção de dependencia (Connection) dentro da Classe.
-	public LancamentoDaoJDBC(Connection connection) {
+	public StatusDaoJDBC(Connection connection) {
 		this.connection = connection;
 	}
-//-------------------------------------------------------------------
-	@Override
-	public void inserir(Lancamento obj) {
+
+/*	@Override
+	public void inserir(Status obj) {
 		PreparedStatement ps = null;
 		try {
 			ps = connection.prepareStatement(
-					"INSERT INTO lancamento "
-			//			+ "(referencia, tipopag_id) "
-						+ "(referencia, total) "
-							+ "VALUES  (?, ?) ",
-							Statement.RETURN_GENERATED_KEYS);
+					"INSERT INTO tipopag "
+							+ "(nome) " 
+							+ "VALUES  (?) ",
+					Statement.RETURN_GENERATED_KEYS);
 
-			ps.setString(1, obj.getReferencia());
-			ps.setDouble(2, obj.getTotal());
-	
+			ps.setString(1, obj.getNome());
 			int linhasAfetadas = ps.executeUpdate();
 
 			if (linhasAfetadas > 0) {
@@ -55,22 +52,17 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 			BD.fecharStatement(ps);
 		}
 	}
-//--------------------------------------------------------------------------
+
 	@Override
-	public void atualizar(Lancamento obj) {
+	public void atualizar(Status obj) {
 		PreparedStatement ps = null;
 		try {
-		//	ps = connection.prepareStatement("UPDATE lancamento " + "SET total = ? " + "WHERE Id = ? ");
-			ps = connection.prepareStatement("UPDATE lancamento " 
-		+ "SET total = ?, "
-		+ " status_id = ?, "
-		+ " tipopag_id = ? "
-					+ "WHERE Id = ? ");
-			//ps.setString(1, obj.getReferencia());
-			ps.setDouble(1, obj.getTotal());
-			ps.setInt(2, obj.getStatus().getId());
-			ps.setInt(3, obj.getTipoPagamento().getId());
-			ps.setInt(4, obj.getId());
+			ps = connection.prepareStatement(
+					"UPDATE tipopag " 
+							+ "SET nome = ? " 
+							+ "WHERE Id = ? ");
+			ps.setString(1, obj.getNome());
+			ps.setInt(2, obj.getId());
 			ps.executeUpdate();
 		} catch (SQLException ex) {
 			new BDException(ex.getMessage());
@@ -83,7 +75,9 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 	public void excluirPorId(Integer id) {
 		PreparedStatement ps = null;
 		try {
-			ps = connection.prepareStatement("DELETE FROM despesa2  " + "WHERE Id = ? ");
+			ps = connection.prepareStatement(
+					"DELETE FROM tipopag  " 
+							+ "WHERE Id = ? ");
 			ps.setInt(1, id);
 			ps.executeUpdate();
 		} catch (SQLException ex) {
@@ -91,53 +85,62 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 		} finally {
 			BD.fecharStatement(ps);
 		}
-	}
+	}*/
 
 	@Override
-	public Lancamento buscarPorId(Integer id) {
+	public Status buscarPorId(Integer id) {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			ps = connection.prepareStatement("SELECT * FROM despesa2 " + "WHERE Id = ? ");
+			ps = connection.prepareStatement(
+					"SELECT * FROM status " 
+							+ "WHERE Id = ? ");
 			ps.setInt(1, id);
 			rs = ps.executeQuery();
 
 			if (rs.next()) {
-				Lancamento obj = new Lancamento();
+				Status obj = new Status();
 				obj.setId(rs.getInt("Id"));
-	//			obj.setNome(rs.getString("nome"));
+				obj.setNome(rs.getString("nome"));
 				return obj;
 			}
 			return null;
-		} catch (SQLException ex) {
+		} 
+		catch (SQLException ex) {
 			throw new BDException(ex.getMessage());
-		} finally {
+		} 
+		finally {
 			BD.fecharStatement(ps);
 			BD.fecharResultSet(rs);
 		}
 	}
 
 	@Override
-	public List<Lancamento> buscarTudo() {
+	public List<Status> buscarTudo() {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			ps = connection.prepareStatement("SELECT * FROM tipopag " + " ORDER BY nome ");
+			ps = connection.prepareStatement(
+					"SELECT * FROM status " 
+							+ " ORDER BY nome ");
 			rs = ps.executeQuery();
-			List<Lancamento> lista = new ArrayList<>();
+			List<Status> lista = new ArrayList<>();
 
 			while (rs.next()) {
-				Lancamento obj = new Lancamento();
+				Status obj = new Status();
 				obj.setId(rs.getInt("Id"));
-		//		obj.setNome(rs.getString("nome"));
+				obj.setNome(rs.getString("nome"));
 				lista.add(obj);
 			}
 			return lista;
-		} catch (SQLException ex) {
+		} 
+		catch (SQLException ex) {
 			throw new BDException(ex.getMessage());
-		} finally {
+		} 
+		finally {
 			BD.fecharStatement(ps);
 			BD.fecharResultSet(rs);
 		}
 	}
+
 }
