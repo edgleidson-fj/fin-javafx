@@ -18,7 +18,6 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 
 	private Connection connection;
 
-	// Força injeção de dependencia (Connection) dentro da Classe.
 	public LancamentoDaoJDBC(Connection connection) {
 		this.connection = connection;
 	}
@@ -29,7 +28,6 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 		try {
 			ps = connection.prepareStatement(
 					"INSERT INTO lancamento "
-			//			+ "(referencia, tipopag_id) "
 						+ "(referencia, total) "
 							+ "VALUES  (?, ?) ",
 							Statement.RETURN_GENERATED_KEYS);
@@ -60,7 +58,6 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 	public void atualizar(Lancamento obj) {
 		PreparedStatement ps = null;
 		try {
-		//	ps = connection.prepareStatement("UPDATE lancamento " + "SET total = ? " + "WHERE Id = ? ");
 			ps = connection.prepareStatement("UPDATE lancamento " 
 		+ "SET total = ?, "
 		+ " status_id = ?, "
@@ -83,7 +80,7 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 	public void excluirPorId(Integer id) {
 		PreparedStatement ps = null;
 		try {
-			ps = connection.prepareStatement("DELETE FROM despesa2  " + "WHERE Id = ? ");
+			ps = connection.prepareStatement("DELETE FROM lancamento  " + "WHERE Id = ? ");
 			ps.setInt(1, id);
 			ps.executeUpdate();
 		} catch (SQLException ex) {
@@ -98,7 +95,7 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			ps = connection.prepareStatement("SELECT * FROM despesa2 " + "WHERE Id = ? ");
+			ps = connection.prepareStatement("SELECT * FROM lancamento " + "WHERE Id = ? ");
 			ps.setInt(1, id);
 			rs = ps.executeQuery();
 
@@ -122,7 +119,7 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			ps = connection.prepareStatement("SELECT * FROM tipopag " + " ORDER BY nome ");
+			ps = connection.prepareStatement("SELECT * FROM lancamento " + " ORDER BY referencia ");
 			rs = ps.executeQuery();
 			List<Lancamento> lista = new ArrayList<>();
 

@@ -89,47 +89,33 @@ public class LController implements Initializable{
 		
 	@FXML
 	public void onBtItemAction(ActionEvent evento) {
-		Stage parentStage = Utils.stageAtual(evento);
-		
-		Lancamento obj = new Lancamento();
-		Despesa desp = new Despesa();
-		Item item = new Item();
-						
-//		cmbStatus.setValue(lancamentoEntidade.getStatus());
-//		cmbTipoPag.setValue(lancamentoEntidade.getTipoPagamento());
-		
+		Stage parentStage = Utils.stageAtual(evento);		
 		//Lancamento
+		Lancamento obj = new Lancamento();
 		txtTotal.setText(String.valueOf(obj.getTotal()));
 		obj.setId(Utils.stringParaInteiro(txtId.getText()));
 		obj.setReferencia(txtReferencia.getText());
 		obj.setTotal((total));
-		
-//	obj.setStatus(cmbStatus.getValue());		
-//	obj.setTipoPagamento(cmbTipoPag.getValue());
 		obj.setStatus(cmbStatus.getValue());
-		obj.setTipoPagamento(cmbTipoPag.getValue());
-		
-		
+		obj.setTipoPagamento(cmbTipoPag.getValue());		
 		lancamentoService.atualizar(obj);
-		txtId.setText(String.valueOf(obj.getId()));
-	
+		txtId.setText(String.valueOf(obj.getId()));	
 		//Despesa
+		Despesa desp = new Despesa();
 		desp.setNome(txtItem.getText());
 		desp.setPreco(Utils.stringParaDouble(txtPreco.getText()));
-		despesaService.salvarOuAtualizar(desp);
-					
+		despesaService.salvarOuAtualizar(desp);					
 		//Item
+		Item item = new Item();
 		item.setLancamento(obj);
 		item.setDespesa(desp);
 		itemService.salvarOuAtualizar(item);		
-		
 		//Total
 		total += desp.getPreco();
 		txtTotal.setText(""+total);	
 		obj.setId(Utils.stringParaInteiro(txtId.getText()));
 		obj.setTotal(total);
-		lancamentoService.atualizar(obj);
-		
+		lancamentoService.atualizar(obj);		
 		//Limpando os campos
 		txtItem.setText("");
 		txtPreco.setText(String.valueOf(0));
