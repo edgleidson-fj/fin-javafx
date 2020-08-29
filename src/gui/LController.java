@@ -1,7 +1,6 @@
 package gui;
 
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Date;
@@ -67,8 +66,8 @@ public class LController implements Initializable {
 	private DatePicker datePickerData;
 	@FXML
 	private ComboBox<TipoPag> cmbTipoPag;
-	@FXML
-	private ComboBox<Status> cmbStatus;
+/*	@FXML
+	private ComboBox<Status> cmbStatus;*/
 	@FXML
 	private Button btItem;
 	@FXML
@@ -83,11 +82,14 @@ public class LController implements Initializable {
 	private TableColumn<Despesa, Double> colunaDespValor;
 //--------------------------------------------------------
 	private ObservableList<TipoPag> obsListaTipoPag;
-	private ObservableList<Status> obsListaStatus;
+//	private ObservableList<Status> obsListaStatus;
 	private ObservableList<Despesa> obsListaDespesaTbView;
 	// ---------------------------------------------------------
 
 	double total;
+	int idLan;
+	int idDesp;
+	int idItem;
 
 	@FXML
 	public void onBtCriarRegistroDeLancamento(ActionEvent evento) {
@@ -100,8 +102,10 @@ public class LController implements Initializable {
 		obj.setData(Date.from(instant));
 		lancamentoService.salvar(obj);
 		txtId.setText(String.valueOf(obj.getId()));
+		int id = obj.getId();
+		idLan = id;
 	}
-
+	
 	@FXML
 	public void onBtItemAction(ActionEvent evento) {
 		Stage parentStage = Utils.stageAtual(evento);		
@@ -112,18 +116,15 @@ public class LController implements Initializable {
 		obj.setId(Utils.stringParaInteiro(txtId.getText()));
 		obj.setReferencia(txtReferencia.getText());
 		obj.setTotal((total));
-		obj.setStatus(cmbStatus.getValue());
+//		obj.setStatus(cmbStatus.getValue());
 		obj.setTipoPagamento(cmbTipoPag.getValue());		
 		lancamentoService.atualizar(obj);
 		txtId.setText(String.valueOf(obj.getId()));	
 		//Despesa
 		Despesa desp = new Despesa();
 		desp.setNome(txtItem.getText());	
-		System.out.println(txtPreco.getText());
 		desp.setPreco(Utils.stringParaDouble(txtPreco.getText()));
-		despesaService.salvarOuAtualizar(desp);			
-		System.out.println(desp.getPreco());
-
+		despesaService.salvarOuAtualizar(desp);
 		//Item
 		Item item = new Item();
 		item.setLancamento(obj);
@@ -191,7 +192,7 @@ public class LController implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		inicializarComboBoxTipoPag();
-		inicializarComboBoxStatus();
+//		inicializarComboBoxStatus();
 		inicializarNodes();
 	}
 
@@ -211,8 +212,7 @@ public class LController implements Initializable {
 
 		colunaDespNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
 		colunaDespValor.setCellValueFactory(new PropertyValueFactory<>("preco"));
-		// Utils.formatTableColumnValorDecimais(colunaDespValor, 2); //Formatar com
-		// (0,00)
+		Utils.formatTableColumnValorDecimais(colunaDespValor, 2); //Formatar com(0,00)
 
 		Stage stage = (Stage) Main.pegarMainScene().getWindow();
 		tbDespesa.prefHeightProperty().bind(stage.heightProperty());
@@ -224,9 +224,9 @@ public class LController implements Initializable {
 		obsListaTipoPag = FXCollections.observableArrayList(listaTipoPag);
 		cmbTipoPag.setItems(obsListaTipoPag);
 
-		List<Status> listaStatus = statusService.buscarTodos();
+	/*	List<Status> listaStatus = statusService.buscarTodos();
 		obsListaStatus = FXCollections.observableArrayList(listaStatus);
-		cmbStatus.setItems(obsListaStatus);
+		cmbStatus.setItems(obsListaStatus);*/
 	}
 
 	private void inicializarComboBoxTipoPag() {
@@ -241,7 +241,7 @@ public class LController implements Initializable {
 		cmbTipoPag.setButtonCell(factory.call(null));
 	}
 
-	private void inicializarComboBoxStatus() {
+	/*private void inicializarComboBoxStatus() {
 		Callback<ListView<Status>, ListCell<Status>> factory = lv -> new ListCell<Status>() {
 			@Override
 			protected void updateItem(Status item, boolean empty) {
@@ -251,5 +251,5 @@ public class LController implements Initializable {
 		};
 		cmbStatus.setCellFactory(factory);
 		cmbStatus.setButtonCell(factory.call(null));
-	}
+	}*/
 }
