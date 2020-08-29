@@ -2,10 +2,8 @@ package gui;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-
 
 import application.Main;
 import gui.util.Alertas;
@@ -31,8 +29,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import model.dao.DespesaDao;
-import model.dao.implementacao.DespesaDaoJDBC;
 import model.entidade.Despesa;
 import model.entidade.Item;
 import model.entidade.Lancamento;
@@ -84,24 +80,10 @@ public class LController implements Initializable{
 	private TableColumn<Despesa, String> colunaDespNome;
 	@FXML
 	private TableColumn<Despesa, Double> colunaDespValor;
-//	@FXML
-//	private TableView<Item> tbDespesa;
-	@FXML
-	private TableColumn<Item, Integer> colunaItemLanId;
-	@FXML
-	private TableColumn<Item, Integer> colunaItemDespId;
-//	@FXML
-//	private TableView<Lancamento> tbDespesa;
-	@FXML
-	private TableColumn<Lancamento, Integer> colunaLanId;
-	@FXML
-	private TableColumn<Lancamento, String> colunaLanRef;
-	//--------------------------------------------------------
+//--------------------------------------------------------
 	private ObservableList<TipoPag> obsListaTipoPag;
 	private ObservableList<Status> obsListaStatus;
-	private ObservableList<Despesa> obsListaDespesaTeste;
-	private ObservableList<Item> obsListaItemTeste;
-	private ObservableList<Lancamento> obsListaLancamentoTeste;
+	private ObservableList<Despesa> obsListaDespesaTbView;
 	//---------------------------------------------------------
 	
 	double total;
@@ -150,63 +132,63 @@ public class LController implements Initializable{
 		txtPreco.setText(String.valueOf(0));		
 		//Carregar TableView do Lançamento
 		List<Despesa> listaDespesa = despesaService.listarPorId(obj.getId());
-		obsListaDespesaTeste = FXCollections.observableArrayList(listaDespesa);
-		tbDespesa.setItems(obsListaDespesaTeste);
-		//	initEditButtons();
-		//	initRemoveButtons();		
-			}
-	//------------------------------------------------------------------
-	
-		public void setLancamentoService(LancamentoService lancamentoService) {
-			this.lancamentoService = lancamentoService;
-		}
-		
-		public void setLancamento(Lancamento lancamentoEntidade) {
-			this.lancamentoEntidade = lancamentoEntidade;
-		}
-		
-		public void setItemService(ItemService itemService) {
-			this.itemService = itemService;
-		}
-		
-		public void setItem(Item itemEntidade) {
-			this.itemEntidade = itemEntidade;
-		}
-		
-		public void setDespesaService(DespesaService despesaService) {
-			this.despesaService = despesaService;
-		}
-		
-		public void setDespesa(Despesa despesaEntidade) {
-			this.despesaEntidade = despesaEntidade;
-		}
-		
-		public void setTipoPagService(TipoPagService tipoPagService) {
-			this.tipoPagService = tipoPagService;
-		}
-		
-		public void setTipoPag(TipoPag tipoPagEntidade) {
-			this.tipoPagEntidade = tipoPagEntidade;
-		}
-		
-		public void setStatusService(StatusService statusService) {
-			this.statusService = statusService;
-		}
-		
-		public void setStatus(Status tipoPagEntidade) {
-			this.statusEntidade = statusEntidade;
-		}
-		//-----------------------------------------------------------------
-		@Override
-		public void initialize(URL url, ResourceBundle rb) {
-			initializeComboBoxTipoPag();
-			initializeComboBoxStatus();
-			initializeNodes();
+		obsListaDespesaTbView = FXCollections.observableArrayList(listaDespesa);
+		tbDespesa.setItems(obsListaDespesaTbView);
+		// initEditButtons();
+		// initRemoveButtons();
+	}
+	// ------------------------------------------------------------------
+
+	public void setLancamentoService(LancamentoService lancamentoService) {
+		this.lancamentoService = lancamentoService;
+	}
+
+	public void setLancamento(Lancamento lancamentoEntidade) {
+		this.lancamentoEntidade = lancamentoEntidade;
+	}
+
+	public void setItemService(ItemService itemService) {
+		this.itemService = itemService;
+	}
+
+	public void setItem(Item itemEntidade) {
+		this.itemEntidade = itemEntidade;
+	}
+
+	public void setDespesaService(DespesaService despesaService) {
+		this.despesaService = despesaService;
+	}
+
+	public void setDespesa(Despesa despesaEntidade) {
+		this.despesaEntidade = despesaEntidade;
+	}
+
+	public void setTipoPagService(TipoPagService tipoPagService) {
+		this.tipoPagService = tipoPagService;
+	}
+
+	public void setTipoPag(TipoPag tipoPagEntidade) {
+		this.tipoPagEntidade = tipoPagEntidade;
+	}
+
+	public void setStatusService(StatusService statusService) {
+		this.statusService = statusService;
+	}
+
+	public void setStatus(Status tipoPagEntidade) {
+		this.statusEntidade = statusEntidade;
+	}
+
+	// -----------------------------------------------------------------
+	@Override
+	public void initialize(URL url, ResourceBundle rb) {
+		inicializarComboBoxTipoPag();
+		inicializarComboBoxStatus();
+		inicializarNodes();
 		}	
 		//------------------------------------------------------------------
 		public void carregarCamposDeCadastro() {
 			txtId.setText(String.valueOf(lancamentoEntidade.getId()));
-//			txtNome.setText(entidade.getNome());
 		}
 		//-------------------------------------------------------------------
 		private  void atualizarPropriaView(Lancamento obj, String caminhoDaView) {
@@ -232,21 +214,16 @@ public class LController implements Initializable{
 			}
 		}		
 		//-----------------------------------------------------------------------------------------------------
-		private void initializeNodes() {
-	/*		colunaItemLanId.setCellValueFactory(new PropertyValueFactory<>("lancamento_id"));
-			colunaItemDespId.setCellValueFactory(new PropertyValueFactory<>("Despesa_id"));*/
-	//		colunaDespId.setCellValueFactory(new PropertyValueFactory<>("id"));
+		private void inicializarNodes() {
 			colunaDespNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
 			colunaDespValor.setCellValueFactory(new PropertyValueFactory<>("preco"));
-//			colunaLanId.setCellValueFactory(new PropertyValueFactory<>("id"));
-//			colunaLanRef.setCellValueFactory(new PropertyValueFactory<>("referencia"));
-			
+
 			Stage stage = (Stage) Main.pegarMainScene().getWindow();
 			tbDespesa.prefHeightProperty().bind(stage.heightProperty());
 		}
 		//-----------------------------------------------------------------
 
-		public void loadAssociatedObjects() {
+		public void carregarObjetosAssociados() {
 			List<TipoPag> listaTipoPag = tipoPagService.buscarTodos();
 			obsListaTipoPag = FXCollections.observableArrayList(listaTipoPag);
 			cmbTipoPag.setItems(obsListaTipoPag);
@@ -256,7 +233,7 @@ public class LController implements Initializable{
 			cmbStatus.setItems(obsListaStatus);		
 		}
 		
-		private void initializeComboBoxTipoPag() {
+		private void inicializarComboBoxTipoPag() {
 			Callback<ListView<TipoPag>, ListCell<TipoPag>> factory = lv -> new ListCell<TipoPag>() {
 				@Override
 				protected void updateItem(TipoPag item, boolean empty) {
@@ -268,7 +245,7 @@ public class LController implements Initializable{
 			cmbTipoPag.setButtonCell(factory.call(null));
 		}
 		
-		private void initializeComboBoxStatus() {
+		private void inicializarComboBoxStatus() {
 			Callback<ListView<Status>, ListCell<Status>> factory = lv -> new ListCell<Status>() {
 				@Override
 				protected void updateItem(Status item, boolean empty) {

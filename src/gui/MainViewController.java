@@ -56,7 +56,7 @@ public class MainViewController implements Initializable {
 			controller.setTipoPagService(new TipoPagService());
 			controller.setStatus(new Status());
 			controller.setStatusService(new StatusService());
-			controller.loadAssociatedObjects();			
+			controller.carregarObjetosAssociados();			
 		});
 	}
 
