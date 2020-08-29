@@ -4,6 +4,7 @@ import java.util.List;
 
 import model.dao.DaoFactory;
 import model.dao.ItemDao;
+import model.entidade.Despesa;
 import model.entidade.Item;
 
 public class ItemService {
@@ -25,5 +26,15 @@ public class ItemService {
 	
 	public void excluir (Item obj) {
 //		dao.excluirPorId(obj.getId());
+	}
+	
+	
+	public List<Item> listarPorId(Integer id){
+		return dao.listarPorId(id);
+	}
+	
+	
+	public Item buscarPorId(Integer id){
+		return dao.buscarPorId(id);
 	}
 }

@@ -12,6 +12,8 @@ import bd.BD;
 import bd.BDException;
 import bd.BDIntegrityException;
 import model.dao.LancamentoDao;
+import model.entidade.Despesa;
+import model.entidade.Item;
 import model.entidade.Lancamento;
 
 public class LancamentoDaoJDBC implements LancamentoDao {
@@ -114,7 +116,7 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 		}
 	}
 
-	@Override
+	/*@Override
 	public List<Lancamento> buscarTudo() {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -136,5 +138,79 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 			BD.fecharStatement(ps);
 			BD.fecharResultSet(rs);
 		}
+	}*/
+	
+	//Listar todos Itens do Lancamento. teste
+	@Override
+	public List<Lancamento> buscarTudo() {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			ps = connection.prepareStatement(
+					"SELECT * "
+				+ "from lancamento as l, item as i, despesa as d "	
+//				+	"FROM lancamento "
+//			+	"inner JOIN item "
+//				+	"ON lancamento.id = item.Lancamento_id "
+//				+	"inner JOIN despesa "
+//				+	"ON despesa.id = item.despesa_id "
+//				+	"WHERE a.id = 100");
++ "where l.id = i.lancamento_id "
++ "and i.despesa_id = d.id "
++ "and l.id = 100 "
++ "limit 5 ");
+					
+			rs = ps.executeQuery();
+			List<Lancamento> lista = new ArrayList<>();
+			List<Despesa> lista2 = new ArrayList<>();
+			
+			while (rs.next()) {
+				Lancamento obj = new Lancamento();
+
+				Despesa d = new Despesa();
+				d.setNome(rs.getString("nome"));
+				
+				Item i = new Item();
+			//	i.setDespesa(d);
+			//	i.setLancamento(obj);
+				i.setDespesa(d);
+				
+				obj.setId(rs.getInt("Id"));
+				obj.setReferencia(rs.getString("referencia"));
+				obj.setItemLan(i);
+			//	obj.getItemLan().setLancamento();
+				lista.add(obj);
+				System.out.println("lista ---- "+lista);
+			}
+			return lista;
+		} catch (SQLException ex) {
+			throw new BDException(ex.getMessage());
+		} finally {
+			BD.fecharStatement(ps);
+			BD.fecharResultSet(rs);
+		}
 	}
+	//-------------------------------------------------------------------------------------
+	
+	private Item instantiateItem(ResultSet rs, Despesa dep, Lancamento lan) throws SQLException {
+//		private Item instantiateItem(ResultSet rs, Despesa dep) throws SQLException {
+			Item obj = new Item();
+			obj.setLancamento(lan);
+			obj.setDespesa(dep);
+			return obj;
+		}
+
+		private Despesa instantiateDespesa(ResultSet rs) throws SQLException {
+			Despesa dep = new Despesa();
+			dep.setId(rs.getInt("Id"));
+			dep.setNome(rs.getString("Nome"));
+			return dep;
+		}
+		
+		private Lancamento instantiateLancamento(ResultSet rs) throws SQLException {
+			Lancamento lan = new Lancamento();
+			lan.setId(rs.getInt("Id"));
+			return lan;
+	}
+	
 }

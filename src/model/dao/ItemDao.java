@@ -11,4 +11,5 @@ public interface ItemDao {
 	void excluirPorId(Integer id);
 	Item buscarPorId(Integer id);
 	List<Item> buscarTudo();
+	List<Item> listarPorId(Integer id);
 }

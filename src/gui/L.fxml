@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -24,13 +25,15 @@
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="491.0" minWidth="10.0" prefWidth="200.0" />
         </columnConstraints>
         <rowConstraints>
+          <RowConstraints maxHeight="26.0" minHeight="10.0" prefHeight="26.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="26.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="31.0" minHeight="10.0" prefHeight="24.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Referência" GridPane.rowIndex="2">
+            <Label text="Referência" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets left="5.0" />
                </GridPane.margin></Label>
@@ -38,8 +41,8 @@
                <GridPane.margin>
                   <Insets left="5.0" />
                </GridPane.margin></TextField>
-            <TextField fx:id="txtReferencia" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Button fx:id="btCriarRegistroDeLancamento" mnemonicParsing="false" onAction="#onBtCriarRegistroDeLancamento" text="Criar Registro de Lançamento" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <TextField fx:id="txtReferencia" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Button fx:id="btCriarRegistroDeLancamento" mnemonicParsing="false" onAction="#onBtCriarRegistroDeLancamento" text="Criar Registro de Lançamento" GridPane.columnIndex="1" GridPane.rowIndex="5">
                <GridPane.margin>
                   <Insets bottom="5.0" left="100.0" top="5.0" />
                </GridPane.margin></Button>
@@ -51,7 +54,7 @@
                   <Insets left="100.0" />
                </GridPane.margin>
             </Label>
-            <TextField promptText="   _____/_____/_____" GridPane.columnIndex="2" GridPane.rowIndex="2">
+            <TextField promptText="   _____/_____/_____" GridPane.columnIndex="2" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets left="5.0" right="20.0" />
                </GridPane.margin></TextField>
@@ -61,8 +64,14 @@
                </GridPane.margin>
             </TextField>
          </children>
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
       </GridPane>
-      <ToolBar prefHeight="0.0" prefWidth="563.0" />
+      <ToolBar prefHeight="0.0" prefWidth="563.0">
+         <VBox.margin>
+            <Insets bottom="10.0" top="10.0" />
+         </VBox.margin></ToolBar>
       <HBox prefHeight="99.0" prefWidth="546.0">
          <children>
             <GridPane prefHeight="99.0" prefWidth="321.0">
@@ -98,18 +107,39 @@
                <HBox.margin>
                   <Insets left="10.0" top="15.0" />
                </HBox.margin></Button>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <ComboBox fx:id="cmbTipoPag" layoutX="60.0" layoutY="21.0" prefWidth="150.0" promptText="Tipo de Pagamento" />
+                  <ComboBox fx:id="cmbStatus" layoutX="60.0" layoutY="56.0" prefWidth="150.0" promptText="Status" />
+               </children>
+            </AnchorPane>
          </children>
          <VBox.margin>
             <Insets left="30.0" />
          </VBox.margin>
       </HBox>
-      <TableView prefHeight="126.0" prefWidth="737.0">
-        <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="75.0" text="C2" />
-        </columns>
-      </TableView>
-      <ComboBox fx:id="cmbTipoPag" prefWidth="150.0" />
-      <ComboBox fx:id="cmbStatus" prefWidth="150.0" />
+      <HBox prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <TableView fx:id="tbDespesa" prefHeight="100.0" prefWidth="370.0">
+              <columns>
+                  <TableColumn fx:id="colunaDespNome" prefWidth="75.0" text="Item" />
+                <TableColumn fx:id="colunaDespValor" prefWidth="75.0" text="Valor" />
+              </columns>
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+            </TableView>
+            <Button mnemonicParsing="false" text="Confirmar">
+               <HBox.margin>
+                  <Insets left="50.0" top="50.0" />
+               </HBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" text="Cancelar">
+               <HBox.margin>
+                  <Insets left="20.0" top="50.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
    </children>
 </VBox>

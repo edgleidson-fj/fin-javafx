@@ -2,6 +2,7 @@ package gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -23,15 +24,20 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import model.dao.DespesaDao;
+import model.dao.implementacao.DespesaDaoJDBC;
 import model.entidade.Despesa;
 import model.entidade.Item;
 import model.entidade.Lancamento;
-import model.entidade.TipoPag;
 import model.entidade.Status;
+import model.entidade.TipoPag;
 import model.servico.DespesaService;
 import model.servico.ItemService;
 import model.servico.LancamentoService;
@@ -70,9 +76,32 @@ public class LController implements Initializable{
 	private Button btItem;
 	@FXML	
 	private Button btCriarRegistroDeLancamento;
+	@FXML
+	private TableView<Despesa> tbDespesa;
+	@FXML
+	private TableColumn<Despesa, Integer> colunaDespId;
+	@FXML
+	private TableColumn<Despesa, String> colunaDespNome;
+	@FXML
+	private TableColumn<Despesa, Double> colunaDespValor;
+//	@FXML
+//	private TableView<Item> tbDespesa;
+	@FXML
+	private TableColumn<Item, Integer> colunaItemLanId;
+	@FXML
+	private TableColumn<Item, Integer> colunaItemDespId;
+//	@FXML
+//	private TableView<Lancamento> tbDespesa;
+	@FXML
+	private TableColumn<Lancamento, Integer> colunaLanId;
+	@FXML
+	private TableColumn<Lancamento, String> colunaLanRef;
 	//--------------------------------------------------------
 	private ObservableList<TipoPag> obsListaTipoPag;
-	private ObservableList<Status> obsListaStatus;	
+	private ObservableList<Status> obsListaStatus;
+	private ObservableList<Despesa> obsListaDespesaTeste;
+	private ObservableList<Item> obsListaItemTeste;
+	private ObservableList<Lancamento> obsListaLancamentoTeste;
 	//---------------------------------------------------------
 	
 	double total;
@@ -118,8 +147,14 @@ public class LController implements Initializable{
 		lancamentoService.atualizar(obj);		
 		//Limpando os campos
 		txtItem.setText("");
-		txtPreco.setText(String.valueOf(0));
-		}
+		txtPreco.setText(String.valueOf(0));		
+		//Carregar TableView do Lançamento
+		List<Despesa> listaDespesa = despesaService.listarPorId(obj.getId());
+		obsListaDespesaTeste = FXCollections.observableArrayList(listaDespesa);
+		tbDespesa.setItems(obsListaDespesaTeste);
+		//	initEditButtons();
+		//	initRemoveButtons();		
+			}
 	//------------------------------------------------------------------
 	
 		public void setLancamentoService(LancamentoService lancamentoService) {
@@ -166,6 +201,7 @@ public class LController implements Initializable{
 		public void initialize(URL url, ResourceBundle rb) {
 			initializeComboBoxTipoPag();
 			initializeComboBoxStatus();
+			initializeNodes();
 		}	
 		//------------------------------------------------------------------
 		public void carregarCamposDeCadastro() {
@@ -173,7 +209,7 @@ public class LController implements Initializable{
 //			txtNome.setText(entidade.getNome());
 		}
 		//-------------------------------------------------------------------
-		private  void atualizarPropriaView(TipoPag obj, String caminhoDaView) {
+		private  void atualizarPropriaView(Lancamento obj, String caminhoDaView) {
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource(caminhoDaView));
 				VBox novoVBox = loader.load();			
@@ -195,6 +231,19 @@ public class LController implements Initializable{
 				Alertas.mostrarAlerta("IO Exception", "Erro ao carregar a tela.", ex.getMessage(), AlertType.ERROR);
 			}
 		}		
+		//-----------------------------------------------------------------------------------------------------
+		private void initializeNodes() {
+	/*		colunaItemLanId.setCellValueFactory(new PropertyValueFactory<>("lancamento_id"));
+			colunaItemDespId.setCellValueFactory(new PropertyValueFactory<>("Despesa_id"));*/
+	//		colunaDespId.setCellValueFactory(new PropertyValueFactory<>("id"));
+			colunaDespNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
+			colunaDespValor.setCellValueFactory(new PropertyValueFactory<>("preco"));
+//			colunaLanId.setCellValueFactory(new PropertyValueFactory<>("id"));
+//			colunaLanRef.setCellValueFactory(new PropertyValueFactory<>("referencia"));
+			
+			Stage stage = (Stage) Main.pegarMainScene().getWindow();
+			tbDespesa.prefHeightProperty().bind(stage.heightProperty());
+		}
 		//-----------------------------------------------------------------
 
 		public void loadAssociatedObjects() {

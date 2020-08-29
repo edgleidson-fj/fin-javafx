@@ -51,13 +51,12 @@ public class MainViewController implements Initializable {
 			controller.setDespesaService(new DespesaService());
 			controller.setDespesa(new Despesa());
 			controller.setItemService(new ItemService());
-			controller.setItem(new Item());
-			
+			controller.setItem(new Item());			
 			controller.setTipoPag(new TipoPag());
 			controller.setTipoPagService(new TipoPagService());
 			controller.setStatus(new Status());
 			controller.setStatusService(new StatusService());
-			controller.loadAssociatedObjects();
+			controller.loadAssociatedObjects();			
 		});
 	}
 

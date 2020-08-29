@@ -2,8 +2,6 @@ package model.entidade;
 
 import java.io.Serializable;
 
-import model.entidade.Status;
-
 public class Lancamento implements Serializable{
 	private static final long serialVersionUID = 1L;
 
@@ -13,16 +11,21 @@ public class Lancamento implements Serializable{
 	private Double total;
 	private Status status;
 	
+	
+	//Composto
+	private Item itemLan;
+	
 	public Lancamento() {
 		}
 	
-	public Lancamento(Integer id, String referencia, TipoPag tipoPagamento, Double total, Status status) {
+	public Lancamento(Integer id, String referencia, TipoPag tipoPagamento, Double total, Status status, Item itemLan) {
 		super();
 		this.id = id;
 		this.referencia = referencia;
 		this.tipoPagamento = tipoPagamento;
 		this.total = total;
 		this.status = status;
+		this.itemLan = itemLan;
 	}
 
 	public Integer getId() {
@@ -63,6 +66,14 @@ public class Lancamento implements Serializable{
 
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+	//-------
+	public Item getItemLan() {
+		return itemLan;
+	}
+
+	public void setItemLan(Item itemLan) {
+		this.itemLan = itemLan;
 	}
 
 	@Override

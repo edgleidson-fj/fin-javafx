@@ -56,5 +56,9 @@ public class ItemBKP implements Serializable{
 		} else if (!lancamento_id.equals(other.lancamento_id))
 			return false;
 		return true;
-	}	
+	}
+
+	
+	
+	
 }
