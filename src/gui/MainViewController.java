@@ -91,29 +91,5 @@ public class MainViewController implements Initializable {
 		} catch (IOException ex) {
 			Alertas.mostrarAlerta("IO Exception", "Erro ao carregar a tela.", ex.getMessage(), AlertType.ERROR);
 		}
-	}
-
-	/*/ CARREGA VIEW 2
-	private  void carregarView2(TipoPag obj, String caminhoDaView) {
-		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource(caminhoDaView));
-			VBox novoVBox = loader.load();
-			
-			
-			TipoPagController controller = loader.getController();
-			controller.setTipoPag(obj);
-			controller.carregarCamposDeCadastro();
-
-			Scene mainScene = Main.pegarMainScene();
-			VBox mainVBox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent();
-
-			Node mainMenu = mainVBox.getChildren().get(0);
-			mainVBox.getChildren().clear();
-			mainVBox.getChildren().add(mainMenu);
-			mainVBox.getChildren().addAll(novoVBox);
-		} catch (IOException ex) {
-			Alertas.mostrarAlerta("IO Exception", "Erro ao carregar a tela.", ex.getMessage(), AlertType.ERROR);
-		}
-	}*/
-
+	}	
 }

@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import bd.BD;
@@ -30,12 +31,15 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 		try {
 			ps = connection.prepareStatement(
 					"INSERT INTO lancamento "
-						+ "(referencia, total) "
-							+ "VALUES  (?, ?) ",
+						+ "(referencia, total, data) "
+							+ "VALUES  (?, ?, ?) ",
 							Statement.RETURN_GENERATED_KEYS);
 
 			ps.setString(1, obj.getReferencia());
 			ps.setDouble(2, obj.getTotal());
+			Date hoje = new Date();
+			System.out.println("Hoje = "+hoje);
+			ps.setDate(3, new java.sql.Date(obj.getData().getTime())); 
 	
 			int linhasAfetadas = ps.executeUpdate();
 

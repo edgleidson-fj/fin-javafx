@@ -1,6 +1,7 @@
 package model.entidade;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Lancamento implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -10,15 +11,16 @@ public class Lancamento implements Serializable{
 	private TipoPag tipoPagamento;
 	private Double total;
 	private Status status;
+	private Date data;
 	
 	
-	//Composto
+	//Composto "Teste"
 	private Item itemLan;
 	
 	public Lancamento() {
 		}
 	
-	public Lancamento(Integer id, String referencia, TipoPag tipoPagamento, Double total, Status status, Item itemLan) {
+	public Lancamento(Integer id, String referencia, TipoPag tipoPagamento, Double total, Status status, Item itemLan, Date data) {
 		super();
 		this.id = id;
 		this.referencia = referencia;
@@ -26,6 +28,7 @@ public class Lancamento implements Serializable{
 		this.total = total;
 		this.status = status;
 		this.itemLan = itemLan;
+		this.data = data;
 	}
 
 	public Integer getId() {
@@ -67,7 +70,16 @@ public class Lancamento implements Serializable{
 	public void setStatus(Status status) {
 		this.status = status;
 	}
-	//-------
+	
+	public Date getData() {
+		return data;
+	}
+
+	public void setData(Date data) {
+		this.data = data;
+	}
+
+	//------- "TESTE"
 	public Item getItemLan() {
 		return itemLan;
 	}
@@ -75,6 +87,7 @@ public class Lancamento implements Serializable{
 	public void setItemLan(Item itemLan) {
 		this.itemLan = itemLan;
 	}
+	//-------
 
 	@Override
 	public int hashCode() {

@@ -1,32 +1,31 @@
 package gui;
 
-import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import application.Main;
-import gui.util.Alertas;
+import gui.util.Restricoes;
 import gui.util.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import model.entidade.Despesa;
@@ -40,7 +39,7 @@ import model.servico.LancamentoService;
 import model.servico.StatusService;
 import model.servico.TipoPagService;
 
-public class LController implements Initializable{
+public class LController implements Initializable {
 
 	private LancamentoService lancamentoService;
 	private Lancamento lancamentoEntidade;
@@ -52,8 +51,8 @@ public class LController implements Initializable{
 	private TipoPag tipoPagEntidade;
 	private StatusService statusService;
 	private Status statusEntidade;
-	//----------------------------------------------------------------
-	
+	// ----------------------------------------------------------------
+
 	@FXML
 	private TextField txtId;
 	@FXML
@@ -65,12 +64,14 @@ public class LController implements Initializable{
 	@FXML
 	private TextField txtTotal;
 	@FXML
+	private DatePicker datePickerData;
+	@FXML
 	private ComboBox<TipoPag> cmbTipoPag;
 	@FXML
 	private ComboBox<Status> cmbStatus;
 	@FXML
 	private Button btItem;
-	@FXML	
+	@FXML
 	private Button btCriarRegistroDeLancamento;
 	@FXML
 	private TableView<Despesa> tbDespesa;
@@ -84,23 +85,27 @@ public class LController implements Initializable{
 	private ObservableList<TipoPag> obsListaTipoPag;
 	private ObservableList<Status> obsListaStatus;
 	private ObservableList<Despesa> obsListaDespesaTbView;
-	//---------------------------------------------------------
-	
+	// ---------------------------------------------------------
+
 	double total;
+
 	@FXML
 	public void onBtCriarRegistroDeLancamento(ActionEvent evento) {
 		total += 0.0;
-		Stage parentStage = Utils.stageAtual(evento);		
+		Stage parentStage = Utils.stageAtual(evento);
 		Lancamento obj = new Lancamento();
 		obj.setReferencia(txtReferencia.getText());
 		obj.setTotal(total);
+		Instant instant = Instant.from(datePickerData.getValue().atStartOfDay(ZoneId.systemDefault()));
+		obj.setData(Date.from(instant));
 		lancamentoService.salvar(obj);
 		txtId.setText(String.valueOf(obj.getId()));
 	}
-		
+
 	@FXML
 	public void onBtItemAction(ActionEvent evento) {
 		Stage parentStage = Utils.stageAtual(evento);		
+		Locale.setDefault(Locale.US); // Para definir pontos ao invés de virgula.
 		//Lancamento
 		Lancamento obj = new Lancamento();
 		txtTotal.setText(String.valueOf(obj.getTotal()));
@@ -113,9 +118,12 @@ public class LController implements Initializable{
 		txtId.setText(String.valueOf(obj.getId()));	
 		//Despesa
 		Despesa desp = new Despesa();
-		desp.setNome(txtItem.getText());
+		desp.setNome(txtItem.getText());	
+		System.out.println(txtPreco.getText());
 		desp.setPreco(Utils.stringParaDouble(txtPreco.getText()));
-		despesaService.salvarOuAtualizar(desp);					
+		despesaService.salvarOuAtualizar(desp);			
+		System.out.println(desp.getPreco());
+
 		//Item
 		Item item = new Item();
 		item.setLancamento(obj);
@@ -185,75 +193,63 @@ public class LController implements Initializable{
 		inicializarComboBoxTipoPag();
 		inicializarComboBoxStatus();
 		inicializarNodes();
-		}	
-		//------------------------------------------------------------------
-		public void carregarCamposDeCadastro() {
-			txtId.setText(String.valueOf(lancamentoEntidade.getId()));
-		}
-		//-------------------------------------------------------------------
-		private  void atualizarPropriaView(Lancamento obj, String caminhoDaView) {
-			try {
-				FXMLLoader loader = new FXMLLoader(getClass().getResource(caminhoDaView));
-				VBox novoVBox = loader.load();			
-				
-			/*	TipoPagController controller = loader.getController();
-				controller.setTipoPag(obj);
-				controller.carregarCamposDeCadastro();
-				controller.setTipoPagService(new TipoPagService());
-				controller.carregarTableView();*/
-				        	
-				Scene mainScene = Main.pegarMainScene();
-				VBox mainVBox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent();
+	}
 
-				Node mainMenu = mainVBox.getChildren().get(0);
-				mainVBox.getChildren().clear();
-				mainVBox.getChildren().add(mainMenu);
-				mainVBox.getChildren().addAll(novoVBox);
-			} catch (IOException ex) {
-				Alertas.mostrarAlerta("IO Exception", "Erro ao carregar a tela.", ex.getMessage(), AlertType.ERROR);
+	// ------------------------------------------------------------------
+	public void carregarCamposDeCadastro() {
+		txtId.setText(String.valueOf(lancamentoEntidade.getId()));
+	}
+	// -------------------------------------------------------------------
+
+	// -----------------------------------------------------------------------------------------------------
+	private void inicializarNodes() {
+		Restricoes.setTextFieldInteger(txtId);
+		Restricoes.setTextFieldTamanhoMaximo(txtReferencia, 50);
+		Restricoes.setTextFieldDouble(txtPreco);
+		Restricoes.setTextFieldTamanhoMaximo(txtItem, 30);
+		Utils.formatDatePicker(datePickerData, "dd/MM/yyyy");
+
+		colunaDespNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
+		colunaDespValor.setCellValueFactory(new PropertyValueFactory<>("preco"));
+		// Utils.formatTableColumnValorDecimais(colunaDespValor, 2); //Formatar com
+		// (0,00)
+
+		Stage stage = (Stage) Main.pegarMainScene().getWindow();
+		tbDespesa.prefHeightProperty().bind(stage.heightProperty());
+	}
+	// -----------------------------------------------------------------
+
+	public void carregarObjetosAssociados() {
+		List<TipoPag> listaTipoPag = tipoPagService.buscarTodos();
+		obsListaTipoPag = FXCollections.observableArrayList(listaTipoPag);
+		cmbTipoPag.setItems(obsListaTipoPag);
+
+		List<Status> listaStatus = statusService.buscarTodos();
+		obsListaStatus = FXCollections.observableArrayList(listaStatus);
+		cmbStatus.setItems(obsListaStatus);
+	}
+
+	private void inicializarComboBoxTipoPag() {
+		Callback<ListView<TipoPag>, ListCell<TipoPag>> factory = lv -> new ListCell<TipoPag>() {
+			@Override
+			protected void updateItem(TipoPag item, boolean empty) {
+				super.updateItem(item, empty);
+				setText(empty ? "" : item.getNome());
 			}
-		}		
-		//-----------------------------------------------------------------------------------------------------
-		private void inicializarNodes() {
-			colunaDespNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
-			colunaDespValor.setCellValueFactory(new PropertyValueFactory<>("preco"));
+		};
+		cmbTipoPag.setCellFactory(factory);
+		cmbTipoPag.setButtonCell(factory.call(null));
+	}
 
-			Stage stage = (Stage) Main.pegarMainScene().getWindow();
-			tbDespesa.prefHeightProperty().bind(stage.heightProperty());
-		}
-		//-----------------------------------------------------------------
-
-		public void carregarObjetosAssociados() {
-			List<TipoPag> listaTipoPag = tipoPagService.buscarTodos();
-			obsListaTipoPag = FXCollections.observableArrayList(listaTipoPag);
-			cmbTipoPag.setItems(obsListaTipoPag);
-			
-			List<Status> listaStatus = statusService.buscarTodos();
-			obsListaStatus = FXCollections.observableArrayList(listaStatus);
-			cmbStatus.setItems(obsListaStatus);		
-		}
-		
-		private void inicializarComboBoxTipoPag() {
-			Callback<ListView<TipoPag>, ListCell<TipoPag>> factory = lv -> new ListCell<TipoPag>() {
-				@Override
-				protected void updateItem(TipoPag item, boolean empty) {
-					super.updateItem(item, empty);
-					setText(empty ? "" : item.getNome());
-				}
-			};
-			cmbTipoPag.setCellFactory(factory);
-			cmbTipoPag.setButtonCell(factory.call(null));
-		}
-		
-		private void inicializarComboBoxStatus() {
-			Callback<ListView<Status>, ListCell<Status>> factory = lv -> new ListCell<Status>() {
-				@Override
-				protected void updateItem(Status item, boolean empty) {
-					super.updateItem(item, empty);
-					setText(empty ? "" : item.getNome());
-				}
-			};
-			cmbStatus.setCellFactory(factory);
-			cmbStatus.setButtonCell(factory.call(null));
-		}
+	private void inicializarComboBoxStatus() {
+		Callback<ListView<Status>, ListCell<Status>> factory = lv -> new ListCell<Status>() {
+			@Override
+			protected void updateItem(Status item, boolean empty) {
+				super.updateItem(item, empty);
+				setText(empty ? "" : item.getNome());
+			}
+		};
+		cmbStatus.setCellFactory(factory);
+		cmbStatus.setButtonCell(factory.call(null));
+	}
 }
