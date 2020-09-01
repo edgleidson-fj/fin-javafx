@@ -45,7 +45,7 @@ public class MainViewController implements Initializable {
 
 	@FXML
 	public void onMenuItemLancamentoQuitado() {
-		carregarView("/gui/LanQuitadoView.fxml", (LanQuitadoController controller) -> {
+		carregarView("/gui/LanQuitadoViewfxml", (LanQuitadoController controller) -> {
 			controller.setLancamentoService(new LancamentoService());
 			controller.setLancamento(new Lancamento());
 			controller.setDespesaService(new DespesaService());
