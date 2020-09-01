@@ -63,13 +63,13 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 		PreparedStatement ps = null;
 		try {
 			ps = connection.prepareStatement("UPDATE lancamento " 
-		+ "SET total = ?, "
-		+ " tipopag_id = ? "
+		+ "SET total = ? "
+		//+ " tipopag_id = ? "
 					+ "WHERE Id = ? ");
 			//ps.setString(1, obj.getReferencia());
 			ps.setDouble(1, obj.getTotal());
-			ps.setInt(2, obj.getTipoPagamento().getId());
-			ps.setInt(3, obj.getId());
+			//ps.setInt(2, obj.getTipoPagamento().getId());
+			ps.setInt(2, obj.getId());
 			ps.executeUpdate();
 		} catch (SQLException ex) {
 			new BDException(ex.getMessage());
@@ -116,30 +116,6 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 		}
 	}
 
-	/*@Override
-	public List<Lancamento> buscarTudo() {
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		try {
-			ps = connection.prepareStatement("SELECT * FROM lancamento " + " ORDER BY referencia ");
-			rs = ps.executeQuery();
-			List<Lancamento> lista = new ArrayList<>();
-
-			while (rs.next()) {
-				Lancamento obj = new Lancamento();
-				obj.setId(rs.getInt("Id"));
-		//		obj.setNome(rs.getString("nome"));
-				lista.add(obj);
-			}
-			return lista;
-		} catch (SQLException ex) {
-			throw new BDException(ex.getMessage());
-		} finally {
-			BD.fecharStatement(ps);
-			BD.fecharResultSet(rs);
-		}
-	}*/
-	
 	//Listar todos Itens do Lancamento. teste
 	@Override
 	public List<Lancamento> buscarTudo() {
@@ -195,7 +171,7 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 	@Override
 	public void cancelar(Lancamento obj) {
 		PreparedStatement ps = null;
-		int status = 4;
+		int status = 4; //Cancelado.
 		try {
 			ps = connection.prepareStatement("UPDATE lancamento " 
 		+ "SET status_id = '"+status+"' "
@@ -209,6 +185,27 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 			BD.fecharStatement(ps);
 		}
 	}
+	
+	// Confirmar LancamentoQuitado
+	@Override
+	public void confirmar(Lancamento obj) {
+		PreparedStatement ps = null;
+		int status = 2; //Pago.
+		try {
+			ps = connection.prepareStatement("UPDATE lancamento " 
+		+ "SET tipopag_id = ?, "
+		+" status_id = '"+status+"' "
+		+ "WHERE Id = ? ");
+			ps.setInt(1, obj.getTipoPagamento().getId());
+			ps.setInt(2, obj.getId());
+			ps.executeUpdate();
+		} catch (SQLException ex) {
+			new BDException(ex.getMessage());
+		} finally {
+			BD.fecharStatement(ps);
+		}
+	}
+
 	//-------------------------------------------------------------------------------------
 	
 	private Item instantiateItem(ResultSet rs, Despesa dep, Lancamento lan) throws SQLException {

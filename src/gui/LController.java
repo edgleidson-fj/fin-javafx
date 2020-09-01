@@ -25,6 +25,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
@@ -78,9 +79,13 @@ public class LController implements Initializable {
 /*	@FXML
 	private ComboBox<Status> cmbStatus;*/
 	@FXML
+	private Label lbErro;
+	@FXML
 	private Button btCriarRegistroDeLancamento;
 	@FXML
-	private Button btItem;	
+	private Button btItem;
+	@FXML
+	private Button btConfirmar;
 	@FXML
 	private Button btCancelar;
 	@FXML
@@ -128,7 +133,7 @@ public class LController implements Initializable {
 		obj.setReferencia(txtReferencia.getText());
 		obj.setTotal((total));
 //		obj.setStatus(cmbStatus.getValue());
-		obj.setTipoPagamento(cmbTipoPag.getValue());		
+//		obj.setTipoPagamento(cmbTipoPag.getValue());		
 		lancamentoService.atualizar(obj);
 		txtId.setText(String.valueOf(obj.getId()));	
 		//Despesa
@@ -156,6 +161,28 @@ public class LController implements Initializable {
 		tbDespesa.setItems(obsListaDespesaTbView);
 		// initEditButtons();
 		// initRemoveButtons();
+	}
+	
+	@FXML
+	public void onBtConfirmar(ActionEvent evento) {
+		Stage parentStage = Utils.stageAtual(evento);
+		Lancamento obj = new Lancamento();
+		obj.setId(Utils.stringParaInteiro(txtId.getText()));
+		obj.setTipoPagamento(cmbTipoPag.getValue());
+		lancamentoService.confirmar(obj);
+		carregarPropriaView("/gui/L.fxml", (LController controller) -> {
+			controller.setLancamentoService(new LancamentoService());
+			controller.setLancamento(new Lancamento());
+			controller.setDespesaService(new DespesaService());
+			controller.setDespesa(new Despesa());
+			controller.setItemService(new ItemService());
+			controller.setItem(new Item());			
+			controller.setTipoPag(new TipoPag());
+			controller.setTipoPagService(new TipoPagService());
+			controller.setStatus(new Status());
+			controller.setStatusService(new StatusService());
+			controller.carregarObjetosAssociados();			
+		});
 	}
 	
 	@FXML
@@ -232,9 +259,8 @@ public class LController implements Initializable {
 	public void carregarCamposDeCadastro() {
 		txtId.setText(String.valueOf(lancamentoEntidade.getId()));
 	}
-	// -------------------------------------------------------------------
-
 	// -----------------------------------------------------------------------------------------------------
+
 	private void inicializarNodes() {
 		Restricoes.setTextFieldInteger(txtId);
 		Restricoes.setTextFieldTamanhoMaximo(txtReferencia, 50);

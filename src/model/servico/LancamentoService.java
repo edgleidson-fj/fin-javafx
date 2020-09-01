@@ -29,4 +29,8 @@ public class LancamentoService {
 	public void cancelar(Lancamento obj) {
 		dao.cancelar(obj);
 		}
+	
+	public void confirmar(Lancamento obj) {
+		dao.confirmar(obj);
+		}
 }
