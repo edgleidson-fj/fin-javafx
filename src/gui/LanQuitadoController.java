@@ -48,7 +48,7 @@ import model.servico.LancamentoService;
 import model.servico.StatusService;
 import model.servico.TipoPagService;
 
-public class LController implements Initializable {
+public class LanQuitadoController implements Initializable {
 
 	private LancamentoService lancamentoService;
 	private Lancamento lancamentoEntidade;
@@ -171,7 +171,7 @@ public class LController implements Initializable {
 		obj.setTipoPagamento(cmbTipoPag.getValue());
 		obj.setTipoPagamento(cmbTipoPag.getValue());
 		lancamentoService.confirmarLanQuitado(obj);
-		carregarPropriaView("/gui/L.fxml", (LController controller) -> {
+		carregarPropriaView("/gui/LanQuitadoView.fxml", (LanQuitadoController controller) -> {
 			controller.setLancamentoService(new LancamentoService());
 			controller.setLancamento(new Lancamento());
 			controller.setDespesaService(new DespesaService());
@@ -195,7 +195,7 @@ public class LController implements Initializable {
 		Lancamento obj = new Lancamento();
 		obj.setId(Utils.stringParaInteiro(txtId.getText()));
 		lancamentoService.cancelar(obj);
-		carregarPropriaView("/gui/L.fxml", (LController controller) -> {
+		carregarPropriaView("/gui/L.fxml", (LanQuitadoController controller) -> {
 			controller.setLancamentoService(new LancamentoService());
 			controller.setLancamento(new Lancamento());
 			controller.setDespesaService(new DespesaService());

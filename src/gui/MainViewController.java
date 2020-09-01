@@ -33,7 +33,7 @@ public class MainViewController implements Initializable {
 	private MenuItem menuItemSair;
 
 	@FXML
-	private MenuItem menuItemNovo;
+	private MenuItem menuItemLancamentoQuitado;
 
 	@FXML
 	private MenuItem menuItemTipoPagamento;
@@ -44,8 +44,8 @@ public class MainViewController implements Initializable {
 		}
 
 	@FXML
-	public void onMenuItemNovo() {
-		carregarView("/gui/L.fxml", (LController controller) -> {
+	public void onMenuItemLancamentoQuitado() {
+		carregarView("/gui/LanQuitadoView.fxml", (LanQuitadoController controller) -> {
 			controller.setLancamentoService(new LancamentoService());
 			controller.setLancamento(new Lancamento());
 			controller.setDespesaService(new DespesaService());

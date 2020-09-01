@@ -21,7 +21,7 @@ import model.entidade.Lancamento;
 import model.entidade.TipoPag;
 import model.servico.LancamentoService;
 
-public class LancamentoController implements Initializable{
+public class LancamentoControllerX implements Initializable{
 
 	private LancamentoService service;
 	private Lancamento entidade;
