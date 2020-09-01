@@ -1,5 +1,6 @@
 package gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -7,24 +8,32 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 import application.Main;
+import gui.util.Alertas;
 import gui.util.Restricoes;
 import gui.util.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import model.entidade.Despesa;
@@ -69,9 +78,11 @@ public class LController implements Initializable {
 /*	@FXML
 	private ComboBox<Status> cmbStatus;*/
 	@FXML
-	private Button btItem;
-	@FXML
 	private Button btCriarRegistroDeLancamento;
+	@FXML
+	private Button btItem;	
+	@FXML
+	private Button btCancelar;
 	@FXML
 	private TableView<Despesa> tbDespesa;
 	@FXML
@@ -102,8 +113,8 @@ public class LController implements Initializable {
 		obj.setData(Date.from(instant));
 		lancamentoService.salvar(obj);
 		txtId.setText(String.valueOf(obj.getId()));
-		int id = obj.getId();
-		idLan = id;
+	//	int id = obj.getId();
+	//	idLan = id;
 	}
 	
 	@FXML
@@ -145,6 +156,27 @@ public class LController implements Initializable {
 		tbDespesa.setItems(obsListaDespesaTbView);
 		// initEditButtons();
 		// initRemoveButtons();
+	}
+	
+	@FXML
+	public void onBtCancelar(ActionEvent evento) {
+		Stage parentStage = Utils.stageAtual(evento);
+		Lancamento obj = new Lancamento();
+		obj.setId(Utils.stringParaInteiro(txtId.getText()));
+		lancamentoService.cancelar(obj);
+		carregarPropriaView("/gui/L.fxml", (LController controller) -> {
+			controller.setLancamentoService(new LancamentoService());
+			controller.setLancamento(new Lancamento());
+			controller.setDespesaService(new DespesaService());
+			controller.setDespesa(new Despesa());
+			controller.setItemService(new ItemService());
+			controller.setItem(new Item());			
+			controller.setTipoPag(new TipoPag());
+			controller.setTipoPagService(new TipoPagService());
+			controller.setStatus(new Status());
+			controller.setStatusService(new StatusService());
+			controller.carregarObjetosAssociados();			
+		});
 	}
 	// ------------------------------------------------------------------
 
@@ -252,4 +284,26 @@ public class LController implements Initializable {
 		cmbStatus.setCellFactory(factory);
 		cmbStatus.setButtonCell(factory.call(null));
 	}*/
+	//--------------------------------------------------
+	
+	private synchronized <T> void carregarPropriaView(String caminhoDaView, Consumer<T> acaoDeInicializacao) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(caminhoDaView));
+			VBox novoVBox = loader.load();
+
+			Scene mainScene = Main.pegarMainScene();
+			VBox mainVBox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent();
+
+			Node mainMenu = mainVBox.getChildren().get(0);
+			mainVBox.getChildren().clear();
+			mainVBox.getChildren().add(mainMenu);
+			mainVBox.getChildren().addAll(novoVBox);
+
+			// Pegando segundo parametro dos onMenuItem()
+			T controller = loader.getController();
+			acaoDeInicializacao.accept(controller);
+		} catch (IOException ex) {
+			Alertas.mostrarAlerta("IO Exception", "Erro ao carregar a tela.", ex.getMessage(), AlertType.ERROR);
+		}
+	}	
 }

@@ -38,8 +38,8 @@
               </columns>
             </TableView>
             <Button layoutX="79.0" layoutY="398.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="123.0" text="Confirmar" />
-            <ComboBox fx:id="cmbTipoPag" layoutX="525.0" layoutY="255.0" prefWidth="150.0" promptText="Tipo de Pagamento" />
-            <Button layoutX="240.0" layoutY="397.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="123.0" text="Cancelar" />
+            <ComboBox fx:id="cmbTipoPag" layoutX="560.0" layoutY="256.0" prefWidth="150.0" promptText="Tipo de Pagamento" />
+            <Button fx:id="btCancelar" layoutX="240.0" layoutY="397.0" mnemonicParsing="false" onAction="#onBtCancelar" prefHeight="42.0" prefWidth="123.0" text="Cancelar" />
          </children>
       </AnchorPane>
    </children>

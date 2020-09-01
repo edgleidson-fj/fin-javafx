@@ -25,4 +25,8 @@ public class LancamentoService {
 	public void excluir (Lancamento obj) {
 		dao.excluirPorId(obj.getId());
 	}
+	
+	public void cancelar(Lancamento obj) {
+		dao.cancelar(obj);
+		}
 }

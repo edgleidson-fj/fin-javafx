@@ -11,4 +11,5 @@ public interface LancamentoDao {
 	void excluirPorId(Integer id);
 	Lancamento buscarPorId(Integer id);
 	List<Lancamento> buscarTudo();
+	void cancelar(Lancamento obj);
 }

@@ -190,6 +190,25 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 			BD.fecharResultSet(rs);
 		}
 	}
+	
+	// Cancelar LAncamento
+	@Override
+	public void cancelar(Lancamento obj) {
+		PreparedStatement ps = null;
+		int status = 4;
+		try {
+			ps = connection.prepareStatement("UPDATE lancamento " 
+		+ "SET status_id = '"+status+"' "
+				+ "WHERE Id = ? ");
+		//	ps.setInt(1, obj.getTipoPagamento().getId());
+			ps.setInt(1, obj.getId());
+			ps.executeUpdate();
+		} catch (SQLException ex) {
+			new BDException(ex.getMessage());
+		} finally {
+			BD.fecharStatement(ps);
+		}
+	}
 	//-------------------------------------------------------------------------------------
 	
 	private Item instantiateItem(ResultSet rs, Despesa dep, Lancamento lan) throws SQLException {
