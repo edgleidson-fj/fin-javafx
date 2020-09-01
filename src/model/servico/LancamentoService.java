@@ -30,7 +30,7 @@ public class LancamentoService {
 		dao.cancelar(obj);
 		}
 	
-	public void confirmar(Lancamento obj) {
-		dao.confirmar(obj);
+	public void confirmarLanQuitado(Lancamento obj) {
+		dao.confirmarLanQuitado(obj);
 		}
 }

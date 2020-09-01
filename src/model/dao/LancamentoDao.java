@@ -12,5 +12,5 @@ public interface LancamentoDao {
 	Lancamento buscarPorId(Integer id);
 	List<Lancamento> buscarTudo();
 	void cancelar(Lancamento obj);
-	void confirmar(Lancamento obj);
+	void confirmarLanQuitado(Lancamento obj);
 }

@@ -3,6 +3,7 @@ package gui;
 import java.io.IOException;
 import java.net.URL;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -22,17 +23,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -76,10 +76,6 @@ public class LController implements Initializable {
 	private DatePicker datePickerData;
 	@FXML
 	private ComboBox<TipoPag> cmbTipoPag;
-/*	@FXML
-	private ComboBox<Status> cmbStatus;*/
-	@FXML
-	private Label lbErro;
 	@FXML
 	private Button btCriarRegistroDeLancamento;
 	@FXML
@@ -98,7 +94,6 @@ public class LController implements Initializable {
 	private TableColumn<Despesa, Double> colunaDespValor;
 //--------------------------------------------------------
 	private ObservableList<TipoPag> obsListaTipoPag;
-//	private ObservableList<Status> obsListaStatus;
 	private ObservableList<Despesa> obsListaDespesaTbView;
 	// ---------------------------------------------------------
 
@@ -110,14 +105,20 @@ public class LController implements Initializable {
 	@FXML
 	public void onBtCriarRegistroDeLancamento(ActionEvent evento) {
 		total += 0.0;
+		Date hoje = new Date();
 		Stage parentStage = Utils.stageAtual(evento);
 		Lancamento obj = new Lancamento();
 		obj.setReferencia(txtReferencia.getText());
 		obj.setTotal(total);
+		if(datePickerData.getValue() == null) {
+			obj.setData(hoje);
+		}else {
 		Instant instant = Instant.from(datePickerData.getValue().atStartOfDay(ZoneId.systemDefault()));
 		obj.setData(Date.from(instant));
+		}
 		lancamentoService.salvar(obj);
 		txtId.setText(String.valueOf(obj.getId()));
+		datePickerData.setValue(LocalDate.ofInstant(obj.getData().toInstant(), ZoneId.systemDefault()));
 	//	int id = obj.getId();
 	//	idLan = id;
 	}
@@ -125,15 +126,13 @@ public class LController implements Initializable {
 	@FXML
 	public void onBtItemAction(ActionEvent evento) {
 		Stage parentStage = Utils.stageAtual(evento);		
-		Locale.setDefault(Locale.US); // Para definir pontos ao invés de virgula.
+		Locale.setDefault(Locale.US); 
 		//Lancamento
 		Lancamento obj = new Lancamento();
 		txtTotal.setText(String.valueOf(obj.getTotal()));
 		obj.setId(Utils.stringParaInteiro(txtId.getText()));
 		obj.setReferencia(txtReferencia.getText());
 		obj.setTotal((total));
-//		obj.setStatus(cmbStatus.getValue());
-//		obj.setTipoPagamento(cmbTipoPag.getValue());		
 		lancamentoService.atualizar(obj);
 		txtId.setText(String.valueOf(obj.getId()));	
 		//Despesa
@@ -167,9 +166,11 @@ public class LController implements Initializable {
 	public void onBtConfirmar(ActionEvent evento) {
 		Stage parentStage = Utils.stageAtual(evento);
 		Lancamento obj = new Lancamento();
+		try {
 		obj.setId(Utils.stringParaInteiro(txtId.getText()));
 		obj.setTipoPagamento(cmbTipoPag.getValue());
-		lancamentoService.confirmar(obj);
+		obj.setTipoPagamento(cmbTipoPag.getValue());
+		lancamentoService.confirmarLanQuitado(obj);
 		carregarPropriaView("/gui/L.fxml", (LController controller) -> {
 			controller.setLancamentoService(new LancamentoService());
 			controller.setLancamento(new Lancamento());
@@ -183,6 +184,9 @@ public class LController implements Initializable {
 			controller.setStatusService(new StatusService());
 			controller.carregarObjetosAssociados();			
 		});
+		}catch (RuntimeException ex) {
+			Alertas.mostrarAlerta("Pendente", null, "Favor informar o tipo de pagamento", AlertType.WARNING);
+		}		
 	}
 	
 	@FXML
@@ -251,7 +255,6 @@ public class LController implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		inicializarComboBoxTipoPag();
-//		inicializarComboBoxStatus();
 		inicializarNodes();
 	}
 
@@ -281,10 +284,6 @@ public class LController implements Initializable {
 		List<TipoPag> listaTipoPag = tipoPagService.buscarTodos();
 		obsListaTipoPag = FXCollections.observableArrayList(listaTipoPag);
 		cmbTipoPag.setItems(obsListaTipoPag);
-
-	/*	List<Status> listaStatus = statusService.buscarTodos();
-		obsListaStatus = FXCollections.observableArrayList(listaStatus);
-		cmbStatus.setItems(obsListaStatus);*/
 	}
 
 	private void inicializarComboBoxTipoPag() {
@@ -297,19 +296,7 @@ public class LController implements Initializable {
 		};
 		cmbTipoPag.setCellFactory(factory);
 		cmbTipoPag.setButtonCell(factory.call(null));
-	}
-
-	/*private void inicializarComboBoxStatus() {
-		Callback<ListView<Status>, ListCell<Status>> factory = lv -> new ListCell<Status>() {
-			@Override
-			protected void updateItem(Status item, boolean empty) {
-				super.updateItem(item, empty);
-				setText(empty ? "" : item.getNome());
-			}
-		};
-		cmbStatus.setCellFactory(factory);
-		cmbStatus.setButtonCell(factory.call(null));
-	}*/
+	}	
 	//--------------------------------------------------
 	
 	private synchronized <T> void carregarPropriaView(String caminhoDaView, Consumer<T> acaoDeInicializacao) {

@@ -28,6 +28,10 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 	@Override
 	public void inserir(Lancamento obj) {
 		PreparedStatement ps = null;
+		if(obj.getData() == null) {
+			Date hoje = new Date();
+			System.out.println(hoje);
+		}
 		try {
 			ps = connection.prepareStatement(
 					"INSERT INTO lancamento "
@@ -37,10 +41,9 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 
 			ps.setString(1, obj.getReferencia());
 			ps.setDouble(2, obj.getTotal());
-			ps.setDate(3, new java.sql.Date(obj.getData().getTime())); 
-	
+			ps.setDate(3, new java.sql.Date(obj.getData().getTime()));
+			
 			int linhasAfetadas = ps.executeUpdate();
-
 			if (linhasAfetadas > 0) {
 				ResultSet rs = ps.getGeneratedKeys(); // ID gerado no Insert.
 				if (rs.next()) {
@@ -188,7 +191,7 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 	
 	// Confirmar LancamentoQuitado
 	@Override
-	public void confirmar(Lancamento obj) {
+	public void confirmarLanQuitado(Lancamento obj) {
 		PreparedStatement ps = null;
 		int status = 2; //Pago.
 		try {
@@ -208,7 +211,7 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 
 	//-------------------------------------------------------------------------------------
 	
-	private Item instantiateItem(ResultSet rs, Despesa dep, Lancamento lan) throws SQLException {
+	private Item instanciaItem(ResultSet rs, Despesa dep, Lancamento lan) throws SQLException {
 //		private Item instantiateItem(ResultSet rs, Despesa dep) throws SQLException {
 			Item obj = new Item();
 			obj.setLancamento(lan);
@@ -216,14 +219,14 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 			return obj;
 		}
 
-		private Despesa instantiateDespesa(ResultSet rs) throws SQLException {
+		private Despesa instanciaDespesa(ResultSet rs) throws SQLException {
 			Despesa dep = new Despesa();
 			dep.setId(rs.getInt("Id"));
 			dep.setNome(rs.getString("Nome"));
 			return dep;
 		}
 		
-		private Lancamento instantiateLancamento(ResultSet rs) throws SQLException {
+		private Lancamento instanciaLancamento(ResultSet rs) throws SQLException {
 			Lancamento lan = new Lancamento();
 			lan.setId(rs.getInt("Id"));
 			return lan;
