@@ -33,4 +33,8 @@ public class LancamentoService {
 	public void confirmarLanQuitado(Lancamento obj) {
 		dao.confirmarLanQuitado(obj);
 		}
+	
+	public void confirmarLanAPagar(Lancamento obj) {
+		dao.confirmarLanAPagar(obj);
+		}
 }

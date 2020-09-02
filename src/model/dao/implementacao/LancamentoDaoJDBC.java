@@ -189,7 +189,7 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 		}
 	}
 	
-	// Confirmar LancamentoQuitado
+	// Confirmar Lancamento Quitado
 	@Override
 	public void confirmarLanQuitado(Lancamento obj) {
 		PreparedStatement ps = null;
@@ -209,6 +209,23 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 		}
 	}
 
+	// Confirmar Lancamento A Pagar
+		@Override
+		public void confirmarLanAPagar(Lancamento obj) {
+			PreparedStatement ps = null;
+			int status = 1; //Em Aberto.
+			try {
+				ps = connection.prepareStatement("UPDATE lancamento " 
+			+ "SET status_id = '"+status+"' "
+			+ "WHERE Id = ? ");
+				ps.setInt(1, obj.getId());
+				ps.executeUpdate();
+			} catch (SQLException ex) {
+				new BDException(ex.getMessage());
+			} finally {
+				BD.fecharStatement(ps);
+			}
+		}
 	//-------------------------------------------------------------------------------------
 	
 	private Item instanciaItem(ResultSet rs, Despesa dep, Lancamento lan) throws SQLException {
