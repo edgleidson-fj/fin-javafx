@@ -195,7 +195,7 @@ public class LanQuitadoController implements Initializable {
 		Lancamento obj = new Lancamento();
 		obj.setId(Utils.stringParaInteiro(txtId.getText()));
 		lancamentoService.cancelar(obj);
-		carregarPropriaView("/gui/L.fxml", (LanQuitadoController controller) -> {
+		carregarPropriaView("/gui/LanQuitadoView.fxml", (LanQuitadoController controller) -> {
 			controller.setLancamentoService(new LancamentoService());
 			controller.setLancamento(new Lancamento());
 			controller.setDespesaService(new DespesaService());

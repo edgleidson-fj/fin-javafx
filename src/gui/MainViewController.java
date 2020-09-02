@@ -39,8 +39,7 @@ public class MainViewController implements Initializable {
 	private MenuItem menuItemTipoPagamento;
 
 	@FXML
-	public void onMenuItemSair() {
-		
+	public void onMenuItemSair() {		
 		}
 
 	@FXML
