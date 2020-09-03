@@ -16,13 +16,12 @@ public class ItemService {
 	}
 	
 	public void salvarOuAtualizar(Item obj) {
-		//if(obj.getId() == null) {
 			dao.inserir(obj);
-		/*	}
-		else {
-			dao.atualizar(obj);
-		}*/
 	}
+	
+	public void atualizar(Item obj) {
+			dao.atualizar(obj);
+		}
 	
 	public void excluir (Item obj) {
 //		dao.excluirPorId(obj.getId());

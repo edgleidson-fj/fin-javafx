@@ -22,18 +22,13 @@ public class DespesaService {
 	
 	
 	public void salvarOuAtualizar(Despesa obj) {
-	/*	if(entidade == null) {
-			System.out.println("Entidade Despesa nulo");
-		}
-		if(service == null) {
-			System.out.println("Service Despesa nulo");
-		}*/
-		//if(obj.getId() == null) {
-			dao.inserir(obj);
-		/*	}
-		else {
-			dao.atualizar(obj);
-		}*/
+			dao.inserir(obj);	
+	}
+	
+	public void atualizar(Despesa obj) {
+		System.out.println(obj.getId());
+		System.out.println(obj.getAtivo());
+		dao.atualizar(obj);		
 	}
 	
 	public void excluir (Despesa obj) {

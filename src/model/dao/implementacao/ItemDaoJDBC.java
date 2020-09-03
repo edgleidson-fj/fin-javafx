@@ -61,9 +61,13 @@ public class ItemDaoJDBC implements ItemDao {
 	public void atualizar(Item obj) {
 		PreparedStatement ps = null;
 		try {
-			ps = connection.prepareStatement("UPDATE despesa2 " + "SET nome = ? " + "WHERE Id = ? ");
+		//	ps = connection.prepareStatement("UPDATE item " + "SET lancamaneto_id = 1 " + "WHERE Id = ? ");
+			ps = connection.prepareStatement(" update despesa set ativo = ?  where lancamento_id = ? and despesa_id = ?");
+
 		//	ps.setString(1, obj.getNome());
 	//		ps.setInt(2, obj.getId());
+			ps.setInt(1, obj.getLancamento().getId());
+			ps.setInt(2, obj.getDespesa().getId());
 			ps.executeUpdate();
 		} catch (SQLException ex) {
 			new BDException(ex.getMessage());
@@ -76,7 +80,7 @@ public class ItemDaoJDBC implements ItemDao {
 	public void excluirPorId(Integer id) {
 		PreparedStatement ps = null;
 		try {
-			ps = connection.prepareStatement("DELETE FROM despesa2  " + "WHERE Id = ? ");
+			ps = connection.prepareStatement("DELETE FROM Item  " + "WHERE despesa_Id = ? ");
 			ps.setInt(1, id);
 			ps.executeUpdate();
 		} catch (SQLException ex) {
