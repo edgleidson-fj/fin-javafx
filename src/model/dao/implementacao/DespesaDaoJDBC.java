@@ -24,7 +24,7 @@ public class DespesaDaoJDBC implements DespesaDao {
 		this.connection = connection;
 	}
 //-------------------------------------------------------------------
-	@Override
+	@Override //ok
 	public void inserir(Despesa obj) {
 		PreparedStatement ps = null;
 		try {
@@ -33,15 +33,10 @@ public class DespesaDaoJDBC implements DespesaDao {
 						+ "(nome, preco, ativo) "
 							+ "VALUES  ( ?, ?, ?) ",
 							Statement.RETURN_GENERATED_KEYS);
-
-		//	ps.setInt(1, obj.getId());
 			ps.setString(1, obj.getNome());
 			ps.setDouble(2, obj.getPreco());
 			ps.setString(3, obj.getAtivo());
-		//	ps.setInt(14, obj.getStatus().getId());
-			//forma de pagamento
 			int linhasAfetadas = ps.executeUpdate();
-
 			if (linhasAfetadas > 0) {
 				ResultSet rs = ps.getGeneratedKeys(); // ID gerado no Insert.
 				if (rs.next()) {
@@ -59,12 +54,10 @@ public class DespesaDaoJDBC implements DespesaDao {
 		}
 	}
 //--------------------------------------------------------------------------
-	@Override
+	@Override //ok
 	public void atualizar(Despesa obj) {
 		PreparedStatement ps = null;
-	//	String nao = "N";
 		try {
-	//		ps = connection.prepareStatement("UPDATE despesa2 " + "SET nome = ? " + "WHERE Id = ? ");
 			ps = connection.prepareStatement(" update despesa set ativo = ?  where id = ? ");
 
 			ps.setString(1, obj.getAtivo());
@@ -76,20 +69,13 @@ public class DespesaDaoJDBC implements DespesaDao {
 			BD.fecharStatement(ps);
 		}
 	}
+	//-------------------------------------------------------------------------
 
 	@Override
 	public void excluirPorId(Integer id) {
 		PreparedStatement ps = null;
 		try {
 			ps = connection.prepareStatement("DELETE FROM despesa  " + "WHERE Id = ? ");
-				/*	"update  "
-	        	//			+ " lancamento as l, item as i, despesa as d "
-							+ "item as i, despesa as d "
-							+ "Set i.lancamento_id = 1 "
-	        	//			+ "where l.id = i.lancamento_id "
-	        				+ "and i.despesa_id = d.id "
-	  	        				+ "and despesa.id = ? ");*/
-	  
 			ps.setInt(1, id);
 			ps.executeUpdate();
 		} catch (SQLException ex) {
@@ -98,37 +84,13 @@ public class DespesaDaoJDBC implements DespesaDao {
 			BD.fecharStatement(ps);
 		}
 	}
+//-------------------------------------------------------------------------------------	
 
-	/*@Override
-	public Despesa buscarPorId(Integer id) {
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		try {
-			ps = connection.prepareStatement("SELECT * FROM despesa2 " + "WHERE Id = ? ");
-			ps.setInt(1, id);
-			rs = ps.executeQuery();
-
-			if (rs.next()) {
-				Despesa obj = new Despesa();
-				obj.setId(rs.getInt("Id"));
-	//			obj.setNome(rs.getString("nome"));
-				return obj;
-			}
-			return null;
-		} catch (SQLException ex) {
-			throw new BDException(ex.getMessage());
-		} finally {
-			BD.fecharStatement(ps);
-			BD.fecharResultSet(rs);
-		}
-	}*/
-	
 	@Override
 	public Despesa buscarPorId(Integer id) {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-//			ps = connection.prepareStatement("SELECT * from despesa inner join item on despesa.id = item.despesa_id");
 			ps = connection.prepareStatement("SELECT * FROM despesa " + "WHERE Id = ? ");
 			ps.setInt(1, id);
 			rs = ps.executeQuery();
@@ -148,7 +110,7 @@ public class DespesaDaoJDBC implements DespesaDao {
 		}
 	}
 
-
+//---------------------------------------------------------------------------------------
 	@Override
 	public List<Despesa> buscarTudo() {
 		PreparedStatement ps = null;
@@ -185,61 +147,25 @@ int x = 100;
 		}
 	}
 	//----------------------------------------------------------------------
-	
-	/*@Override
-	public List<Despesa> listarPorId(Integer id) {
-		PreparedStatement st = null;
-		ResultSet rs = null;
-		try {
-			st = connection.prepareStatement(
-				"SELECT * "
-		+ "from lancamento as l, item as i, despesa as d "	
-		+ "where l.id = i.lancamento_id "
-		+ "and i.despesa_id = d.id "
-		//+ "and l.id = 100 "
-		+ "and l.id = ? "
-		+ "order by l.id desc ");
-				
-			st.setInt(1, id);
-			rs = st.executeQuery();
-				List<Despesa> lista = new ArrayList<>();
-		Despesa obj = new Despesa();
-		obj.setNome("nome");
-		
-		lista.add(obj);
-				return lista;
-//			}			
-			}
-		catch (SQLException e) {
-			throw new BDException(e.getMessage());
-		}
-		finally {
-			BD.fecharStatement(st);
-			BD.fecharResultSet(rs);
-		}
-	
-	}*/
-	//===================================================================================================
-	//Metodo de Pesquisa getLista recebendo parametro ID
+
+	//Listar Despesas da tela de Lancamentos.
     public List<Despesa> listarPorId(Integer id){
-  //      PreparedStatement stmt = this.connection.prepareStatement("SELECT * FROM CONTATOS WHERE ID = ?");
-        PreparedStatement stmt = null;
+        PreparedStatement ps = null;
         ResultSet rs = null;
         String sim = "S";
      try {
-        stmt = connection.prepareStatement(
+    	 ps = connection.prepareStatement(
         		"SELECT * "
         				+ "from lancamento as l, item as i, despesa as d "	
         				+ "where l.id = i.lancamento_id "
         				+ "and i.despesa_id = d.id "
         				+ "and l.id = ? and d.ativo = '"+ sim +"' ");
      
-        stmt.setInt(1, id);
-        rs = stmt.executeQuery();
+    	 ps.setInt(1, id);
+        rs = ps.executeQuery();
         
         List<Despesa> lista = new ArrayList<Despesa>();
         while(rs.next()){
-            //Criando um objeto tipo Contato
             Despesa d = new Despesa();
             d.setNome(rs.getString("nome"));
             d.setId(rs.getInt("d.id"));
@@ -247,15 +173,13 @@ int x = 100;
             lista.add(d);
         }
         rs.close();
-        stmt.close();
+        ps.close();
         return lista;
      } catch (SQLException ex) {
 			throw new BDException(ex.getMessage());
 		} finally {
-			BD.fecharStatement(stmt);
+			BD.fecharStatement(ps);
 			BD.fecharResultSet(rs);
 		}
-	//===================================================================================================
-	
-}
+	     }
 }

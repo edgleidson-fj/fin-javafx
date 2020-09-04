@@ -139,12 +139,13 @@ public class LanQuitadoController implements Initializable {
 		Despesa desp = new Despesa();
 		desp.setNome(txtItem.getText());	
 		desp.setPreco(Utils.stringParaDouble(txtPreco.getText()));
-		despesaService.salvarOuAtualizar(desp);
+		desp.setAtivo("S");
+		despesaService.salvar(desp);
 		//Item
 		Item item = new Item();
 		item.setLancamento(obj);
 		item.setDespesa(desp);
-		itemService.salvarOuAtualizar(item);		
+		itemService.salvar(item);		
 		//Total
 		total += desp.getPreco();
 		txtTotal.setText(""+total);	

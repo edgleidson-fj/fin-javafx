@@ -21,13 +21,11 @@ public class DespesaService {
 	
 	
 	
-	public void salvarOuAtualizar(Despesa obj) {
+	public void salvar(Despesa obj) {
 			dao.inserir(obj);	
 	}
 	
 	public void atualizar(Despesa obj) {
-		System.out.println(obj.getId());
-		System.out.println(obj.getAtivo());
 		dao.atualizar(obj);		
 	}
 	
@@ -42,7 +40,6 @@ public class DespesaService {
 	
 	
 	public List<Despesa> listarPorId(Integer id){
-		System.out.println("Id service "+id);
 		return dao.listarPorId(id);
 	}
 	

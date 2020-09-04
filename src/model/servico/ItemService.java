@@ -15,7 +15,7 @@ public class ItemService {
 		return dao.buscarTudo();
 	}
 	
-	public void salvarOuAtualizar(Item obj) {
+	public void salvar(Item obj) {
 			dao.inserir(obj);
 	}
 	

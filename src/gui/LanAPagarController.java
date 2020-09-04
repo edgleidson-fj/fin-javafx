@@ -133,12 +133,12 @@ public class LanAPagarController implements Initializable {
 		desp.setNome(txtItem.getText());
 		desp.setPreco(Utils.stringParaDouble(txtPreco.getText()));
 		desp.setAtivo("S");
-		despesaService.salvarOuAtualizar(desp);
+		despesaService.salvar(desp);
 		// Item
 		Item item = new Item();
 		item.setLancamento(obj);
 		item.setDespesa(desp);
-		itemService.salvarOuAtualizar(item);
+		itemService.salvar(item);
 		// Total
 		total += desp.getPreco();
 		txtTotal.setText("" + total);
@@ -153,7 +153,7 @@ public class LanAPagarController implements Initializable {
 		obsListaDespesaTbView = FXCollections.observableArrayList(listaDespesa);
 		  tbDespesa.setItems(obsListaDespesaTbView);			
 		  // initEditButtons(); //
-		  initRemoveButtons();
+		  iniciarBotaoRemover();
 		 }
 
 	@FXML
@@ -265,7 +265,7 @@ public class LanAPagarController implements Initializable {
 	}	
 	//-----------------------------------------------------------------------------------------------------------
 	
-	private void initRemoveButtons() {
+	private void iniciarBotaoRemover() {
 		colunaRemover.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
 		colunaRemover.setCellFactory(param -> new TableCell<Despesa, Despesa>() {
 			private final Button button = new Button("remover");
@@ -278,35 +278,31 @@ public class LanAPagarController implements Initializable {
 					return;
 				}
 				setGraphic(button);
-				button.setOnAction(event -> removeEntity(obj));
+				button.setOnAction(event -> removerDespesa(obj));
 			}
 		});
 	}
 
-	private void removeEntity(Despesa desp) {
+	private void removerDespesa(Despesa desp) {
 		Optional<ButtonType> result = Alertas.mostrarConfirmacao("Confirmação", "Tem certeza que deseja remover?");
-
 		if (result.get() == ButtonType.OK) {
 			if (despesaService == null) {
 				throw new IllegalStateException("Service nulo");
 			}
 			try {
-				System.out.println("I = "+desp);
 				desp.setAtivo("N");	
 				despesaService.atualizar(desp);
-				
 				Lancamento lan = new Lancamento();
 				total -= desp.getPreco();
 				txtTotal.setText("" + total);
 				lan.setId(Utils.stringParaInteiro(txtId.getText()));
 				lan.setTotal(total);
-				lancamentoService.atualizar(lan);
-				
+				lancamentoService.atualizar(lan);				
 				//Carregar TableView do Lançamento 
 				List<Despesa> listaDespesa = despesaService.listarPorId(lan.getId()); 
 				obsListaDespesaTbView = FXCollections.observableArrayList(listaDespesa);
 				  tbDespesa.setItems(obsListaDespesaTbView);			
-				  initRemoveButtons();
+				  iniciarBotaoRemover();
 			}
 			catch (BDIntegrityException ex) {
 				Alertas.mostrarAlerta("Erro ao remover objeto", null, ex.getMessage(), AlertType.ERROR);
