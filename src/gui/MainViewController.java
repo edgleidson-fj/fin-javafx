@@ -36,6 +36,8 @@ public class MainViewController implements Initializable {
 	@FXML
 	private MenuItem menuItemLancamentoAPagar;
 	@FXML
+	private MenuItem menuItemContasQuitadoTodos;
+	@FXML
 	private MenuItem menuItemTipoPagamento;
 
 	@FXML
@@ -69,6 +71,15 @@ public class MainViewController implements Initializable {
 			controller.setItemService(new ItemService());
 			controller.setItem(new Item());			
 			});
+	}
+	
+	@FXML
+	public void onMenuItemContasQuitadoTodos() {
+		carregarView("/gui/ContasQuitadasView.fxml", (ContasQuitadasController controller) ->{
+			controller.setLancamentoService(new LancamentoService());
+			controller.setLancamento(new Lancamento());
+			controller.carregarTableView();
+		});
 	}
 
 	@FXML
