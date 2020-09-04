@@ -8,13 +8,16 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
 import application.Main;
+import bd.BDIntegrityException;
 import gui.util.Alertas;
 import gui.util.Restricoes;
 import gui.util.Utils;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,11 +28,13 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -86,6 +91,8 @@ public class LanQuitadoController implements Initializable {
 	private Button btCancelar;
 	@FXML
 	private TableView<Despesa> tbDespesa;
+	@FXML
+	private TableColumn<Despesa, Despesa> colunaRemover;
 	@FXML
 	private TableColumn<Despesa, Integer> colunaDespId;
 	@FXML
@@ -159,8 +166,7 @@ public class LanQuitadoController implements Initializable {
 		List<Despesa> listaDespesa = despesaService.listarPorId(obj.getId());
 		obsListaDespesaTbView = FXCollections.observableArrayList(listaDespesa);
 		tbDespesa.setItems(obsListaDespesaTbView);
-		// initEditButtons();
-		// initRemoveButtons();
+		iniciarBotaoRemover();
 	}
 	
 	@FXML
@@ -272,6 +278,7 @@ public class LanQuitadoController implements Initializable {
 		Restricoes.setTextFieldTamanhoMaximo(txtItem, 30);
 		Utils.formatDatePicker(datePickerData, "dd/MM/yyyy");
 
+		colunaDespId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		colunaDespNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
 		colunaDespValor.setCellValueFactory(new PropertyValueFactory<>("preco"));
 		Utils.formatTableColumnValorDecimais(colunaDespValor, 2); //Formatar com(0,00)
@@ -320,4 +327,50 @@ public class LanQuitadoController implements Initializable {
 			Alertas.mostrarAlerta("IO Exception", "Erro ao carregar a tela.", ex.getMessage(), AlertType.ERROR);
 		}
 	}	
+	//-----------------------------------------------------------------------------------------------------------
+	
+		private void iniciarBotaoRemover() {
+			colunaRemover.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+			colunaRemover.setCellFactory(param -> new TableCell<Despesa, Despesa>() {
+				private final Button button = new Button("remover");
+
+				@Override
+				protected void updateItem(Despesa obj, boolean empty) {
+					super.updateItem(obj, empty);
+					if (obj == null) {
+						setGraphic(null);
+						return;
+					}
+					setGraphic(button);
+					button.setOnAction(event -> removerDespesa(obj));
+				}
+			});
+		}
+
+		private void removerDespesa(Despesa desp) {
+			Optional<ButtonType> result = Alertas.mostrarConfirmacao("Confirmação", "Tem certeza que deseja remover?");
+			if (result.get() == ButtonType.OK) {
+				if (despesaService == null) {
+					throw new IllegalStateException("Service nulo");
+				}
+				try {
+					desp.setAtivo("N");	
+					despesaService.atualizar(desp);
+					Lancamento lan = new Lancamento();
+					total -= desp.getPreco();
+					txtTotal.setText("" + total);
+					lan.setId(Utils.stringParaInteiro(txtId.getText()));
+					lan.setTotal(total);
+					lancamentoService.atualizar(lan);				
+					//Carregar TableView do Lançamento 
+					List<Despesa> listaDespesa = despesaService.listarPorId(lan.getId()); 
+					obsListaDespesaTbView = FXCollections.observableArrayList(listaDespesa);
+					  tbDespesa.setItems(obsListaDespesaTbView);			
+					  iniciarBotaoRemover();
+				}
+				catch (BDIntegrityException ex) {
+					Alertas.mostrarAlerta("Erro ao remover objeto", null, ex.getMessage(), AlertType.ERROR);
+				}
+			}
+		}
 }
