@@ -60,7 +60,7 @@ public class TipoPag implements Serializable{
 
 	@Override
 	public String toString() {
-		return "TipoPag [nome=" + nome + "]";
+		return nome;
 	}
 	
 	

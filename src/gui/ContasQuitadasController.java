@@ -16,11 +16,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import model.entidade.Lancamento;
 import model.entidade.TipoPag;
 import model.servico.LancamentoService;
+import model.servico.TipoPagService;
 
 public class ContasQuitadasController implements Initializable {
 
 	private LancamentoService lancamentoService;
 	private Lancamento lancamentoEntidade;
+	private TipoPagService tipoPagService;
+	private TipoPag tipoPagEntidade;
 	// -------------------------------------------
 
 	@FXML
@@ -35,6 +38,8 @@ public class ContasQuitadasController implements Initializable {
 	private TableColumn<Lancamento, Double> colunaLanValor;
 	@FXML
 	private TableColumn<Lancamento, TipoPag> colunaTipoPag;
+//	@FXML
+//	private TableColumn<TipoPag, TipoPag> colunaTipoPag;
 	// -----------------------------------------------------
 
 	private ObservableList<Lancamento> obsListaLancamentoTbView;
@@ -48,6 +53,15 @@ public class ContasQuitadasController implements Initializable {
 	public void setLancamento(Lancamento lancamentoEntidade) {
 		this.lancamentoEntidade = lancamentoEntidade;
 	}
+	
+	public void setTipoPagService(TipoPagService tipoPagService) {
+		this.tipoPagService = tipoPagService;
+	}
+
+	public void setTipoPag(TipoPag tipoPagEntidade) {
+		this.tipoPagEntidade = tipoPagEntidade;
+	}
+
 	//----------------------------------------------------------
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -61,7 +75,8 @@ public class ContasQuitadasController implements Initializable {
 		colunaLanRef.setCellValueFactory(new PropertyValueFactory<>("referencia"));
 		colunaLanValor.setCellValueFactory(new PropertyValueFactory<>("total"));
 		Utils.formatTableColumnValorDecimais(colunaLanValor, 2); // Formatar com(0,00)
-		colunaTipoPag.setCellValueFactory(new PropertyValueFactory<>("nome"));
+		colunaTipoPag.setCellValueFactory(new PropertyValueFactory<>("tipoPagamento"));
+	
 	}
 	
 	public void carregarTableView() {

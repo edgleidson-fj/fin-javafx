@@ -148,51 +148,30 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-	/*		ps = connection.prepareStatement("SELECT l.*, TipoPag.nome FROM Lancamento l "
-					+ "INNER JOIN TipoPag "
-					+ "ON l.tipoPag_id = TipoPag.id");   */
-			ps = connection.prepareStatement("SELECT lancamento.*,tipopag.Nome as nome  FROM lancamento "
-					+ "INNER JOIN tipopag  ON lancamento.tipopag_Id = tipopag.Id " + "ORDER BY id ");
+			ps = connection.prepareStatement("SELECT * FROM Lancamento l "
+					+ "INNER JOIN TipoPag t "
+					+ "ON l.tipoPag_id = t.id");   
+		
 					
 			rs = ps.executeQuery();
 			List<Lancamento> lista = new ArrayList<>();
 			
-//			while (rs.next()) {
-			//	Lancamento obj = new Lancamento();
-			//	TipoPag pag = new TipoPag();
-		
-				/*		pag.setId(rs.getInt("id"));
-				pag.setNome(rs.getString("tipopag.nome"));		
+			while (rs.next()) {
+			TipoPag pag = new TipoPag();
+				pag.setId(rs.getInt("id"));
+				pag.setNome(rs.getString("t.nome"));
+					
+				Lancamento obj = new Lancamento();
+				obj.setData(new java.util.Date(rs.getTimestamp("data").getTime()));
 				obj.setId(rs.getInt("id"));
 				obj.setReferencia(rs.getString("referencia"));
-			//	obj.setData(rs.getDate("data"));
 				obj.setTotal(rs.getDouble("total"));
-				//obj.setTipoPagamento(rs.getString(""));
-			//	obj.getItemLan().setLancamento(); */
+				obj.setTipoPagamento(pag);						
 				
-				
-		/*	TipoPag pag =	instanciaTipoPag(rs);
-			System.out.println(pag.getNome());
-			Lancamento lan =	instanciaLancamento(rs, pag);	
-				*/
-			
-			
-			
-			Map<Integer, TipoPag> map = new HashMap<>();
-
-			while (rs.next()) {
-				TipoPag tipoPagNaoRepetido = map.get(rs.getInt("tipopag_Id"));
-				if (tipoPagNaoRepetido == null) {
-					tipoPagNaoRepetido = instanciaTipoPag(rs);
-					map.put(rs.getInt("tipopag_Id"), tipoPagNaoRepetido); // Inserir no Map<chave , valor>.
-				}
-				Lancamento lan = instanciaLancamento(rs, tipoPagNaoRepetido);
-			
-			
 			
 			
 		
-				lista.add(lan);
+				lista.add(obj);
 			}
 			return lista;
 		} catch (SQLException ex) {
