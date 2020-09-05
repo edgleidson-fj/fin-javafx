@@ -7,9 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import bd.BD;
 import bd.BDException;
@@ -183,7 +181,8 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 						"SELECT * FROM Lancamento l "
 						+ "INNER JOIN TipoPag t "
 						+ "ON l.tipoPag_id = t.id "
-						+ "WHERE status_id = 2");   		
+						+ "WHERE status_id = 2 "
+						+ "ORDER BY data ASC");   		
 						
 				rs = ps.executeQuery();
 				List<Lancamento> lista = new ArrayList<>();
@@ -207,7 +206,45 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 				BD.fecharStatement(ps);
 				BD.fecharResultSet(rs);
 			}
-		}
+		}  
+		
+		//Listar todos Lancamento ok.
+				@Override
+				public List<Lancamento> buscarTudoEmAberto() {
+					PreparedStatement ps = null;
+					ResultSet rs = null;
+					int status = 1; //Em Aberto.
+					try {
+						ps = connection.prepareStatement(
+								"SELECT * FROM Lancamento l "
+								+ "INNER JOIN TipoPag t "
+								+ "ON l.tipoPag_id = t.id "
+								+ "WHERE status_id = '"+status+"' "
+								+ "ORDER BY data ASC");   		
+								
+						rs = ps.executeQuery();
+						List<Lancamento> lista = new ArrayList<>();
+						
+						while (rs.next()) {
+						TipoPag pag = new TipoPag();
+							pag.setId(rs.getInt("id"));
+							pag.setNome(rs.getString("t.nome"));					
+							Lancamento obj = new Lancamento();
+							obj.setData(new java.util.Date(rs.getTimestamp("data").getTime()));
+							obj.setId(rs.getInt("id"));
+							obj.setReferencia(rs.getString("referencia"));
+							obj.setTotal(rs.getDouble("total"));
+							obj.setTipoPagamento(pag);				
+							lista.add(obj);
+						}
+						return lista;
+					} catch (SQLException ex) {
+						throw new BDException(ex.getMessage());
+					} finally {
+						BD.fecharStatement(ps);
+						BD.fecharResultSet(rs);
+					}
+				}
 	
 	// Cancelar LAncamento
 	@Override

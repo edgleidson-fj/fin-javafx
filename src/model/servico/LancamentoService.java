@@ -18,6 +18,10 @@ public class LancamentoService {
 		return dao.buscarTudoQuitado();
 	}
 	
+	public List<Lancamento> buscarTudoEmAberto(){
+		return dao.buscarTudoEmAberto();
+	}
+	
 	public void salvar(Lancamento obj) {
 			dao.inserir(obj);
 		}

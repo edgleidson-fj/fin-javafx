@@ -38,6 +38,8 @@ public class MainViewController implements Initializable {
 	@FXML
 	private MenuItem menuItemContasQuitadoTodos;
 	@FXML
+	private MenuItem menuItemContasEmAbertoTodos;
+	@FXML
 	private MenuItem menuItemTipoPagamento;
 
 	@FXML
@@ -76,6 +78,15 @@ public class MainViewController implements Initializable {
 	@FXML
 	public void onMenuItemContasQuitadoTodos() {
 		carregarView("/gui/ContasQuitadasView.fxml", (ContasQuitadasController controller) ->{
+			controller.setLancamentoService(new LancamentoService());
+			controller.setLancamento(new Lancamento());
+			controller.carregarTableView();
+		});
+	}
+	
+	@FXML
+	public void onMenuItemContasEmAbertoTodos() {
+		carregarView("/gui/ContasEmAbertoView.fxml", (ContasEmAbertoController controller) ->{
 			controller.setLancamentoService(new LancamentoService());
 			controller.setLancamento(new Lancamento());
 			controller.carregarTableView();

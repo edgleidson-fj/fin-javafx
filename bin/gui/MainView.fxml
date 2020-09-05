@@ -41,7 +41,7 @@
                               <Menu mnemonicParsing="false" text="Contas A Pagar">
                                 <items>
                                   <MenuItem mnemonicParsing="false" text="Mês Atual" />
-                                  <MenuItem mnemonicParsing="false" text="Todos" />
+                                  <MenuItem fx:id="menuItemContasEmAbertoTodos" mnemonicParsing="false" onAction="#onMenuItemContasEmAbertoTodos" text="Todos" />
                                 </items>
                               </Menu>
                           </items>
