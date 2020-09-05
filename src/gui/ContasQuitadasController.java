@@ -83,7 +83,7 @@ public class ContasQuitadasController implements Initializable {
 		if (lancamentoService == null) {
 			throw new IllegalStateException("Service was null");
 		}
-		List<Lancamento> lista = lancamentoService.buscarTodos(); 
+		List<Lancamento> lista = lancamentoService.buscarTudoQuitado(); 
 		obsListaLancamentoTbView = FXCollections.observableArrayList(lista);
 		  tbLancamento.setItems(obsListaLancamentoTbView);			
 		  // Botão Detalhe(); //

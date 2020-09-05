@@ -139,10 +139,7 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 		}
 	}
 	
-	
-
-
-	//Listar todos Itens do Lancamento. teste
+	//Listar todos Lancamento ok.
 	@Override
 	public List<Lancamento> buscarTudo() {
 		PreparedStatement ps = null;
@@ -150,8 +147,7 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 		try {
 			ps = connection.prepareStatement("SELECT * FROM Lancamento l "
 					+ "INNER JOIN TipoPag t "
-					+ "ON l.tipoPag_id = t.id");   
-		
+					+ "ON l.tipoPag_id = t.id");   		
 					
 			rs = ps.executeQuery();
 			List<Lancamento> lista = new ArrayList<>();
@@ -159,18 +155,13 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 			while (rs.next()) {
 			TipoPag pag = new TipoPag();
 				pag.setId(rs.getInt("id"));
-				pag.setNome(rs.getString("t.nome"));
-					
+				pag.setNome(rs.getString("t.nome"));					
 				Lancamento obj = new Lancamento();
 				obj.setData(new java.util.Date(rs.getTimestamp("data").getTime()));
 				obj.setId(rs.getInt("id"));
 				obj.setReferencia(rs.getString("referencia"));
 				obj.setTotal(rs.getDouble("total"));
-				obj.setTipoPagamento(pag);						
-				
-			
-			
-		
+				obj.setTipoPagamento(pag);				
 				lista.add(obj);
 			}
 			return lista;
@@ -181,6 +172,42 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 			BD.fecharResultSet(rs);
 		}
 	}
+	
+	//Listar todos Lancamento ok.
+		@Override
+		public List<Lancamento> buscarTudoQuitado() {
+			PreparedStatement ps = null;
+			ResultSet rs = null;
+			try {
+				ps = connection.prepareStatement(
+						"SELECT * FROM Lancamento l "
+						+ "INNER JOIN TipoPag t "
+						+ "ON l.tipoPag_id = t.id "
+						+ "WHERE status_id = 2");   		
+						
+				rs = ps.executeQuery();
+				List<Lancamento> lista = new ArrayList<>();
+				
+				while (rs.next()) {
+				TipoPag pag = new TipoPag();
+					pag.setId(rs.getInt("id"));
+					pag.setNome(rs.getString("t.nome"));					
+					Lancamento obj = new Lancamento();
+					obj.setData(new java.util.Date(rs.getTimestamp("data").getTime()));
+					obj.setId(rs.getInt("id"));
+					obj.setReferencia(rs.getString("referencia"));
+					obj.setTotal(rs.getDouble("total"));
+					obj.setTipoPagamento(pag);				
+					lista.add(obj);
+				}
+				return lista;
+			} catch (SQLException ex) {
+				throw new BDException(ex.getMessage());
+			} finally {
+				BD.fecharStatement(ps);
+				BD.fecharResultSet(rs);
+			}
+		}
 	
 	// Cancelar LAncamento
 	@Override
