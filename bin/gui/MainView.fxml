@@ -34,7 +34,7 @@
                           <items>
                               <Menu mnemonicParsing="false" text="Contas Quitadas">
                                 <items>
-                                  <MenuItem mnemonicParsing="false" text="Mês Atual" />
+                                  <MenuItem fx:id="menuItemContasQuitadoMesAtual" mnemonicParsing="false" onAction="#onMenuItemContasQuitadoMesAtual" text="Mês Atual" />
                                     <MenuItem fx:id="menuItemContasQuitadoTodos" mnemonicParsing="false" onAction="#onMenuItemContasQuitadoTodos" text="Todos" />
                                 </items>
                               </Menu>

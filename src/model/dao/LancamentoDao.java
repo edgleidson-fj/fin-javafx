@@ -12,6 +12,7 @@ public interface LancamentoDao {
 	Lancamento buscarPorId(Integer id);
 	List<Lancamento> buscarTudo();
 	List<Lancamento> buscarTudoQuitado();
+	List<Lancamento> buscarContasQuitadoMesAtual();
 	List<Lancamento> buscarTudoEmAberto();
 	List<Lancamento> buscarContasAPagarMesAtual();
 	void cancelar(Lancamento obj);

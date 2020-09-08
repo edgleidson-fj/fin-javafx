@@ -15,7 +15,6 @@ import bd.BDException;
 import bd.BDIntegrityException;
 import model.dao.LancamentoDao;
 import model.entidade.Lancamento;
-import model.entidade.Status;
 import model.entidade.TipoPag;
 
 public class LancamentoDaoJDBC implements LancamentoDao {
@@ -299,6 +298,7 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 			}
 		}
 	
+		// ok
 		public ArrayList<Lancamento> buscarContasAPagarMesAtual() {	
 			PreparedStatement ps = null;
 			ResultSet rs = null;
@@ -369,82 +369,136 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 				+ "ORDER BY data ASC ");
 				break;
 			}
-			
-			/*			switch (mesAtual) {
-			case 0:
-				sql.append("WHERE Month(data) =  '01' and despag = 'N' and despcanc = 'N' and Year(data) = Year(now()) ");
-				sql.append("ORDER BY data ASC ");
-				break;
-			case 1:
-				sql.append("WHERE Month(data) =  '02' and despag = 'N' and despcanc = 'N' and Year(data) = Year(now()) ");
-				sql.append("ORDER BY data ASC ");
-				break;
-			case 2:
-				sql.append("WHERE Month(data) =  '03' and despag = 'N' and despcanc = 'N' and Year(data) = Year(now()) ");
-				sql.append("ORDER BY data ASC ");
-				break;
-			case 3:
-				sql.append("WHERE Month(data) =  '04' and despag = 'N' and despcanc = 'N' and Year(data) = Year(now()) ");
-				sql.append("ORDER BY data ASC ");
-				break;
-			case 4:
-				sql.append("WHERE Month(data) =  '05' and despag = 'N' and despcanc = 'N' and Year(data) = Year(now()) ");
-				sql.append("ORDER BY data ASC ");
-				break;
-			case 5:
-				sql.append("WHERE Month(data) =  '06' and despag = 'N' and despcanc = 'N' and Year(data) = Year(now()) ");
-				sql.append("ORDER BY data ASC ");
-				break;
-			case 6:
-				sql.append("WHERE Month(data) =  '07' and despag = 'N' and despcanc = 'N' and Year(data) = Year(now()) ");
-				sql.append("ORDER BY data ASC ");
-				break;
-			case 7:
-				sql.append("WHERE Month(data) =  '08' and despag = 'N' and despcanc = 'N' and Year(data) = Year(now()) ");
-				sql.append("ORDER BY data ASC ");
-				break;
-			case 8:
-				sql.append("WHERE Month(data) =  '09' and despag = 'N' and despcanc = 'N' and Year(data) = Year(now()) ");
-				sql.append("ORDER BY data ASC ");
-				break;
-			case 9:
-				sql.append("WHERE Month(data) =  '10' and despag = 'N' and despcanc = 'N' and Year(data) = Year(now()) ");
-				sql.append("ORDER BY data ASC ");
-				break;
-			case 10:
-				sql.append("WHERE Month(data) =  '11' and status_id = 1 and Year(data) = Year(now()) ");
-				sql.append("ORDER BY data ASC ");
-				break;
-			default:
-				sql.append("WHERE Month(data) =  '12' and despag = 'N' and despcanc = 'N' and Year(data) = Year(now()) ");
-				sql.append("ORDER BY data ASC ");
-			}*/
-
-
+	
 rs = ps.executeQuery();
 
-			// Criando um Array para os Resultados do código acima
 			ArrayList<Lancamento> itens = new ArrayList<Lancamento>();
-
-			// Listando os Categorias e Gastos
 			while (rs.next()) {
 //				Status status = new Status();
 //				status.setId(resultado.getInt("status.id"));
 //				status.setNome(resultado.getString("status.nome"));
 
-				Lancamento l = new Lancamento(); // Gasto
+				Lancamento l = new Lancamento(); 
 				l.setId(rs.getInt("lancamento.id"));
 				l.setReferencia(rs.getString("lancamento.referencia"));
 				l.setData(rs.getDate("lancamento.data"));
 				l.setTotal(rs.getDouble("lancamento.total"));
 //		        l.setStatus(status);
 				itens.add(l);
-			}
-			
+			}			
 			return itens;
 		}
 			catch(SQLException ex) {
-				//erro
+				return null;
+				}
+			finally {
+				BD.fecharStatement(ps);
+				BD.fecharResultSet(rs);
+			}
+			}
+		
+		public ArrayList<Lancamento> buscarContasQuitadoMesAtual() {	
+			PreparedStatement ps = null;
+			ResultSet rs = null;
+			try {
+			Calendar datahoje = Calendar.getInstance();
+			int mesAtual = datahoje.get(Calendar.MONTH);
+		//	 int mesAtual = 0;
+			
+			switch (mesAtual) {
+			case 0:
+			ps = connection.prepareStatement("SELECT * FROM lancamento, tipopag "
+			+"WHERE Month(data) =  '01' and Status_id = 2 and Year(data) = Year(now()) "
+			+ "AND tipopag.id = tipopag_id "
+			+ "ORDER BY data ASC ");
+			break;
+			case 1:
+				ps = connection.prepareStatement("SELECT * FROM lancamento, tipopag "
+				+"WHERE Month(data) =  '02' and Status_id = 2 and Year(data) = Year(now()) "
+				+ "AND tipopag.id = tipopag_id "
+				+ "ORDER BY data ASC ");
+				break;
+			case 2:
+				ps = connection.prepareStatement("SELECT * FROM lancamento, tipopag "
+				+"WHERE Month(data) =  '03' and Status_id = 2 and Year(data) = Year(now()) "
+				+ "AND tipopag.id = tipopag_id "
+				+ "ORDER BY data ASC ");
+				break;
+			case 3:
+				ps = connection.prepareStatement("SELECT * FROM lancamento, tipopag " 
+				+"WHERE Month(data) =  '04' and Status_id = 2 and Year(data) = Year(now()) "
+				+ "AND tipopag.id = tipopag_id "
+				+ "ORDER BY data ASC ");
+				break;
+			case 4:
+				ps = connection.prepareStatement("SELECT * FROM lancamento, tipopag "
+				+"WHERE Month(data) =  '05' and Status_id = 2 and Year(data) = Year(now()) "
+				+ "AND tipopag.id = tipopag_id "		
+				+ "ORDER BY data ASC ");
+				break;
+			case 5:
+				ps = connection.prepareStatement("SELECT * FROM lancamento, tipopag "
+				+"WHERE Month(data) =  '06' and Status_id = 2 and Year(data) = Year(now()) "
+				+ "AND tipopag.id = tipopag_id "		
+				+ "ORDER BY data ASC ");
+				break;
+			case 6:
+				ps = connection.prepareStatement("SELECT * FROM lancamento, tipopag "
+				+"WHERE Month(data) =  '07' and Status_id = 2 and Year(data) = Year(now()) "
+				+ "AND tipopag.id = tipopag_id "		
+				+ "ORDER BY data ASC ");
+				break;
+			case 7:
+				ps = connection.prepareStatement("SELECT * FROM lancamento, tipopag "
+				+"WHERE Month(data) =  '08' and Status_id = 2 and Year(data) = Year(now()) "
+				+ "AND tipopag.id = tipopag_id "		
+				+ "ORDER BY data ASC ");
+				break;
+			case 8:
+				ps = connection.prepareStatement("SELECT * FROM lancamento, tipopag "
+				+"WHERE Month(data) =  '09' and Status_id = 2 and Year(data) = Year(now()) "
+				+ "AND tipopag.id = tipopag_id "		
+				+ "ORDER BY data ASC ");
+				break;
+			case 9:
+				ps = connection.prepareStatement("SELECT * FROM lancamento, tipopag "
+				+"WHERE Month(data) =  '10' and Status_id = 2 and Year(data) = Year(now()) "
+				+ "AND tipopag.id = tipopag_id "		
+				+ "ORDER BY data ASC ");
+				break;
+			case 10:
+				ps = connection.prepareStatement("SELECT * FROM lancamento, tipopag "
+				+"WHERE Month(data) =  '11' and Status_id = 2 and Year(data) = Year(now()) "
+				+ "AND tipopag.id = tipopag_id "		
+				+ "ORDER BY data ASC ");
+				break;
+			default:
+				ps = connection.prepareStatement("SELECT * FROM lancamento, tipopag "
+				+"WHERE Month(data) =  '12' and Status_id = 2 and Year(data) = Year(now()) "
+				+ "AND tipopag.id = tipopag_id "		
+				+ "ORDER BY data ASC ");
+				break;
+			}
+	
+			rs = ps.executeQuery();
+
+			ArrayList<Lancamento> itens = new ArrayList<Lancamento>();
+			while (rs.next()) {
+				TipoPag tp = new TipoPag();
+				tp.setId(rs.getInt("tipopag.id"));
+				tp.setNome(rs.getString("tipopag.nome"));
+
+				Lancamento l = new Lancamento(); 
+				l.setId(rs.getInt("lancamento.id"));
+				l.setReferencia(rs.getString("lancamento.referencia"));
+				l.setData(rs.getDate("lancamento.data"));
+				l.setTotal(rs.getDouble("lancamento.total"));
+		        l.setTipoPagamento(tp);
+				itens.add(l);
+			}			
+			return itens;
+		}
+			catch(SQLException ex) {
 				return null;
 				}
 			finally {
