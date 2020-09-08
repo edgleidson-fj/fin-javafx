@@ -18,7 +18,7 @@ import model.entidade.TipoPag;
 import model.servico.LancamentoService;
 import model.servico.TipoPagService;
 
-public class ContasEmAbertoController implements Initializable {
+public class ContasEmAbertoMesAtualController implements Initializable {
 
 	private LancamentoService lancamentoService;
 	private Lancamento lancamentoEntidade;
@@ -77,7 +77,7 @@ public class ContasEmAbertoController implements Initializable {
 		if (lancamentoService == null) {
 			throw new IllegalStateException("Service was null");
 		}
-		List<Lancamento> lista = lancamentoService.buscarTudoEmAberto(); 
+		List<Lancamento> lista = lancamentoService.buscarContasAPagarMesAtual();
 		obsListaLancamentoTbView = FXCollections.observableArrayList(lista);
 		  tbLancamento.setItems(obsListaLancamentoTbView);			
 		  // Botão Detalhe(); //

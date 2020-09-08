@@ -22,6 +22,11 @@ public class LancamentoService {
 		return dao.buscarTudoEmAberto();
 	}
 	
+	public List<Lancamento> buscarContasAPagarMesAtual(){
+		return dao.buscarContasAPagarMesAtual();
+	}
+	
+	
 	public void salvar(Lancamento obj) {
 			dao.inserir(obj);
 		}

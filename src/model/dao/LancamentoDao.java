@@ -13,6 +13,7 @@ public interface LancamentoDao {
 	List<Lancamento> buscarTudo();
 	List<Lancamento> buscarTudoQuitado();
 	List<Lancamento> buscarTudoEmAberto();
+	List<Lancamento> buscarContasAPagarMesAtual();
 	void cancelar(Lancamento obj);
 	void confirmarLanQuitado(Lancamento obj);
 	void confirmarLanAPagar(Lancamento obj);
