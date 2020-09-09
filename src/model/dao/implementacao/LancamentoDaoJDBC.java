@@ -24,7 +24,7 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 	public LancamentoDaoJDBC(Connection connection) {
 		this.connection = connection;
 	}
-	//-------------------------------------------------------------------------------------
+	/*/-------------------------------------------------------------------------------------
 	
 			private TipoPag instanciaTipoPag(ResultSet rs) throws SQLException {
 				TipoPag pag = new TipoPag();
@@ -42,7 +42,7 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 				obj.setTipoPagamento(pag);
 				return obj;
 			}				
-			//--------------------------------------------------------------------------
+			//--------------------------------------------------------------------------*/
 	
 	@Override
 	public void inserir(Lancamento obj) {
@@ -84,13 +84,11 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 	public void atualizar(Lancamento obj) {
 		PreparedStatement ps = null;
 		try {
-			ps = connection.prepareStatement("UPDATE lancamento " 
-		+ "SET total = ? "
-		//+ " tipopag_id = ? "
+			ps = connection.prepareStatement(
+					"UPDATE lancamento " 
+					+ "SET total = ? "
 					+ "WHERE Id = ? ");
-			//ps.setString(1, obj.getReferencia());
 			ps.setDouble(1, obj.getTotal());
-			//ps.setInt(2, obj.getTipoPagamento().getId());
 			ps.setInt(2, obj.getId());
 			ps.executeUpdate();
 		} catch (SQLException ex) {
@@ -122,11 +120,9 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 			ps = connection.prepareStatement("SELECT * FROM lancamento " + "WHERE Id = ? ");
 			ps.setInt(1, id);
 			rs = ps.executeQuery();
-
 			if (rs.next()) {
 				Lancamento obj = new Lancamento();
 				obj.setId(rs.getInt("Id"));
-	//			obj.setNome(rs.getString("nome"));
 				return obj;
 			}
 			return null;
@@ -144,13 +140,12 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			ps = connection.prepareStatement("SELECT * FROM Lancamento l "
+			ps = connection.prepareStatement(
+					"SELECT * FROM Lancamento l "
 					+ "INNER JOIN TipoPag t "
-					+ "ON l.tipoPag_id = t.id");   		
-					
+					+ "ON l.tipoPag_id = t.id"); 					
 			rs = ps.executeQuery();
-			List<Lancamento> lista = new ArrayList<>();
-			
+			List<Lancamento> lista = new ArrayList<>();			
 			while (rs.next()) {
 			TipoPag pag = new TipoPag();
 				pag.setId(rs.getInt("id"));
@@ -183,11 +178,9 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 						+ "INNER JOIN TipoPag t "
 						+ "ON l.tipoPag_id = t.id "
 						+ "WHERE status_id = 2 "
-						+ "ORDER BY data ASC");   		
-						
+						+ "ORDER BY data ASC");			
 				rs = ps.executeQuery();
-				List<Lancamento> lista = new ArrayList<>();
-				
+				List<Lancamento> lista = new ArrayList<>();				
 				while (rs.next()) {
 				TipoPag pag = new TipoPag();
 					pag.setId(rs.getInt("id"));
@@ -207,8 +200,7 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 				BD.fecharStatement(ps);
 				BD.fecharResultSet(rs);
 			}
-		}  
-		
+		}  		
 			
 		//Listar todos Lancamento Em Aberto ok.
 		@Override
@@ -221,8 +213,7 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 						+ "WHERE status_id = 1 ");      
 						
 				rs = ps.executeQuery();
-				List<Lancamento> lista = new ArrayList<>();
-				
+				List<Lancamento> lista = new ArrayList<>();				
 				while (rs.next()) {
 				TipoPag pag = new TipoPag();
 					Lancamento obj = new Lancamento();
@@ -250,7 +241,6 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 			ps = connection.prepareStatement("UPDATE lancamento " 
 		+ "SET status_id = '"+status+"' "
 				+ "WHERE Id = ? ");
-		//	ps.setInt(1, obj.getTipoPagamento().getId());
 			ps.setInt(1, obj.getId());
 			ps.executeUpdate();
 		} catch (SQLException ex) {
@@ -260,7 +250,7 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 		}
 	}
 	
-	// Confirmar Lancamento Quitado
+	// Confirmar Lancamento Quitado ok
 	@Override
 	public void confirmarLanQuitado(Lancamento obj) {
 		PreparedStatement ps = null;
@@ -280,7 +270,7 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 		}
 	}
 
-	// Confirmar Lancamento A Pagar
+	// Confirmar Lancamento A Pagar ok
 		@Override
 		public void confirmarLanAPagar(Lancamento obj) {
 			PreparedStatement ps = null;
@@ -305,7 +295,6 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 			try {
 			Calendar datahoje = Calendar.getInstance();
 			int mesAtual = datahoje.get(Calendar.MONTH);
-		//	 int mesAtual = 7;
 			
 			switch (mesAtual) {
 			case 0:
@@ -369,21 +358,14 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 				+ "ORDER BY data ASC ");
 				break;
 			}
-	
-rs = ps.executeQuery();
-
+			rs = ps.executeQuery();
 			ArrayList<Lancamento> itens = new ArrayList<Lancamento>();
 			while (rs.next()) {
-//				Status status = new Status();
-//				status.setId(resultado.getInt("status.id"));
-//				status.setNome(resultado.getString("status.nome"));
-
 				Lancamento l = new Lancamento(); 
 				l.setId(rs.getInt("lancamento.id"));
 				l.setReferencia(rs.getString("lancamento.referencia"));
 				l.setData(rs.getDate("lancamento.data"));
 				l.setTotal(rs.getDouble("lancamento.total"));
-//		        l.setStatus(status);
 				itens.add(l);
 			}			
 			return itens;
@@ -397,14 +379,14 @@ rs = ps.executeQuery();
 			}
 			}
 		
+		//ok
 		public ArrayList<Lancamento> buscarContasQuitadoMesAtual() {	
 			PreparedStatement ps = null;
 			ResultSet rs = null;
 			try {
 			Calendar datahoje = Calendar.getInstance();
 			int mesAtual = datahoje.get(Calendar.MONTH);
-		//	 int mesAtual = 0;
-			
+		
 			switch (mesAtual) {
 			case 0:
 			ps = connection.prepareStatement("SELECT * FROM lancamento, tipopag "
@@ -478,10 +460,8 @@ rs = ps.executeQuery();
 				+ "AND tipopag.id = tipopag_id "		
 				+ "ORDER BY data ASC ");
 				break;
-			}
-	
+			}	
 			rs = ps.executeQuery();
-
 			ArrayList<Lancamento> itens = new ArrayList<Lancamento>();
 			while (rs.next()) {
 				TipoPag tp = new TipoPag();
@@ -505,8 +485,5 @@ rs = ps.executeQuery();
 				BD.fecharStatement(ps);
 				BD.fecharResultSet(rs);
 			}
-			}
-		
-		
-		
+			}			
 }

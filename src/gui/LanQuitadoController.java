@@ -31,6 +31,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
@@ -76,7 +77,7 @@ public class LanQuitadoController implements Initializable {
 	@FXML
 	private TextField txtPreco;
 	@FXML
-	private TextField txtTotal;
+	private Label lbTotal;
 	@FXML
 	private DatePicker datePickerData;
 	@FXML
@@ -136,7 +137,7 @@ public class LanQuitadoController implements Initializable {
 		Locale.setDefault(Locale.US); 
 		//Lancamento
 		Lancamento obj = new Lancamento();
-		txtTotal.setText(String.valueOf(obj.getTotal()));
+		lbTotal.setText(String.valueOf(obj.getTotal()));
 		obj.setId(Utils.stringParaInteiro(txtId.getText()));
 		obj.setReferencia(txtReferencia.getText());
 		obj.setTotal((total));
@@ -155,7 +156,7 @@ public class LanQuitadoController implements Initializable {
 		itemService.salvar(item);		
 		//Total
 		total += desp.getPreco();
-		txtTotal.setText(""+total);	
+		lbTotal.setText(String.format("R$ %.2f", total));
 		obj.setId(Utils.stringParaInteiro(txtId.getText()));
 		obj.setTotal(total);
 		lancamentoService.atualizar(obj);		
@@ -175,7 +176,6 @@ public class LanQuitadoController implements Initializable {
 		Lancamento obj = new Lancamento();
 		try {
 		obj.setId(Utils.stringParaInteiro(txtId.getText()));
-//		obj.setTipoPagamento(cmbTipoPag.getValue());
 		obj.setTipoPagamento(cmbTipoPag.getValue());
 		lancamentoService.confirmarLanQuitado(obj);
 		carregarPropriaView("/gui/LanQuitadoView.fxml", (LanQuitadoController controller) -> {
@@ -358,7 +358,7 @@ public class LanQuitadoController implements Initializable {
 					despesaService.atualizar(desp);
 					Lancamento lan = new Lancamento();
 					total -= desp.getPreco();
-					txtTotal.setText("" + total);
+					lbTotal.setText(String.format("R$ %.2f", total));
 					lan.setId(Utils.stringParaInteiro(txtId.getText()));
 					lan.setTotal(total);
 					lancamentoService.atualizar(lan);				
