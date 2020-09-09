@@ -10,6 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -38,8 +39,8 @@ public class ContasQuitadasMesAtualController implements Initializable {
 	private TableColumn<Lancamento, Double> colunaLanValor;
 	@FXML
 	private TableColumn<Lancamento, TipoPag> colunaTipoPag;
-//	@FXML
-//	private TableColumn<TipoPag, TipoPag> colunaTipoPag;
+	@FXML
+	private Label lbTotal;
 	// -----------------------------------------------------
 
 	private ObservableList<Lancamento> obsListaLancamentoTbView;
@@ -65,7 +66,7 @@ public class ContasQuitadasMesAtualController implements Initializable {
 	//----------------------------------------------------------
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		inicializarNodes();
+		inicializarNodes();		
 	}
 	
 	private void inicializarNodes() {
@@ -76,7 +77,6 @@ public class ContasQuitadasMesAtualController implements Initializable {
 		colunaLanValor.setCellValueFactory(new PropertyValueFactory<>("total"));
 		Utils.formatTableColumnValorDecimais(colunaLanValor, 2); // Formatar com(0,00)
 		colunaTipoPag.setCellValueFactory(new PropertyValueFactory<>("tipoPagamento"));
-	
 	}
 	
 	public void carregarTableView() {
@@ -86,8 +86,14 @@ public class ContasQuitadasMesAtualController implements Initializable {
 		List<Lancamento> lista = lancamentoService.buscarContasQuitadoMesAtual();
 		obsListaLancamentoTbView = FXCollections.observableArrayList(lista);
 		  tbLancamento.setItems(obsListaLancamentoTbView);			
-		  // Botão Detalhe(); //
-	}
+		  // Botão Detalhe(); 
+		  //Valor Total
+		  Double soma  = 0.0; 
+			for (Lancamento tab : obsListaLancamentoTbView) {
+			    soma += tab.getTotal();
+			} 
+			lbTotal.setText(String.format("R$ %.2f", soma));
+	}	
 	// -----------------------------------------------------------------
 
 

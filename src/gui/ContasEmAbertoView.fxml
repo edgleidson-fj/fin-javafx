@@ -25,6 +25,11 @@
                   <TableColumn minWidth="7.0" prefWidth="27.0" text="x" />
               </columns>
             </TableView>
+            <Label fx:id="lbTotal" layoutX="613.0" layoutY="6.0" textFill="#3008f8">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </children>

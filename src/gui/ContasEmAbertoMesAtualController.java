@@ -10,6 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -36,6 +37,8 @@ public class ContasEmAbertoMesAtualController implements Initializable {
 	private TableColumn<Lancamento, String> colunaLanRef;
 	@FXML
 	private TableColumn<Lancamento, Double> colunaLanValor;
+	@FXML
+	private Label lbTotal;
 	// -----------------------------------------------------
 
 	private ObservableList<Lancamento> obsListaLancamentoTbView;
@@ -74,13 +77,16 @@ public class ContasEmAbertoMesAtualController implements Initializable {
 }
 	
 	public void carregarTableView() {
-		if (lancamentoService == null) {
-			throw new IllegalStateException("Service was null");
-		}
 		List<Lancamento> lista = lancamentoService.buscarContasAPagarMesAtual();
 		obsListaLancamentoTbView = FXCollections.observableArrayList(lista);
 		  tbLancamento.setItems(obsListaLancamentoTbView);			
 		  // Botão Detalhe(); //
+		//Valor Total
+		  Double soma  = 0.0; 
+			for (Lancamento tab : obsListaLancamentoTbView) {
+			    soma += tab.getTotal();
+			} 
+			lbTotal.setText(String.format("R$ %.2f", soma));
 	}
 	// -----------------------------------------------------------------
 
