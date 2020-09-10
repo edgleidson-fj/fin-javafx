@@ -6,6 +6,7 @@ import model.dao.DaoFactory;
 import model.dao.ItemDao;
 import model.entidade.Despesa;
 import model.entidade.Item;
+import model.entidade.Lancamento;
 
 public class ItemService {
 	
@@ -23,8 +24,12 @@ public class ItemService {
 			dao.atualizar(obj);
 		}
 	
-	public void excluir (Item obj) {
+/*	public void excluir (Item obj) {
 //		dao.excluirPorId(obj.getId());
+	}*/
+	
+	public void excluir (Lancamento lanId, Despesa despId) {
+	dao.excluirPorId(lanId.getId(), despId.getId());
 	}
 	
 	

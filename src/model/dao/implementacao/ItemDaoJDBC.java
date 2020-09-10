@@ -25,6 +25,7 @@ public class ItemDaoJDBC implements ItemDao {
 		this.connection = connection;
 	}
 //-------------------------------------------------------------------
+	//ok
 	@Override
 	public void inserir(Item obj) {
 		PreparedStatement ps = null;
@@ -56,7 +57,7 @@ public class ItemDaoJDBC implements ItemDao {
 			BD.fecharStatement(ps);
 		}
 	}
-//--------------------------------------------------------------------------
+
 	@Override
 	public void atualizar(Item obj) {
 		PreparedStatement ps = null;
@@ -77,11 +78,12 @@ public class ItemDaoJDBC implements ItemDao {
 	}
 
 	@Override
-	public void excluirPorId(Integer id) {
+	public void excluirPorId(Integer lanId, Integer despId) {
 		PreparedStatement ps = null;
 		try {
-			ps = connection.prepareStatement("DELETE FROM Item  " + "WHERE despesa_Id = ? ");
-			ps.setInt(1, id);
+			ps = connection.prepareStatement("DELETE FROM item WHERE lancamento_id = ? AND despesa_id = ?");
+			ps.setInt(1, lanId);
+			ps.setInt(2, despId);
 			ps.executeUpdate();
 		} catch (SQLException ex) {
 			new BDIntegrityException(ex.getMessage());

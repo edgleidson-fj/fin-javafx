@@ -44,6 +44,7 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 			}				
 			//--------------------------------------------------------------------------*/
 	
+	//Registrar Lancamento. ok
 	@Override
 	public void inserir(Lancamento obj) {
 		PreparedStatement ps = null;
@@ -79,7 +80,8 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 			BD.fecharStatement(ps);
 		}
 	}
-//--------------------------------------------------------------------------
+
+	//Atualizar valor Total ao adicionar Itens no Lançamento. ok
 	@Override
 	public void atualizar(Lancamento obj) {
 		PreparedStatement ps = null;
@@ -167,7 +169,7 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 		}
 	}
 	
-	//Listar todos Lancamento ok.
+	//Listar todos Lancamento (Quitados) ok.
 		@Override
 		public List<Lancamento> buscarTudoQuitado() {
 			PreparedStatement ps = null;
@@ -202,7 +204,7 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 			}
 		}  		
 			
-		//Listar todos Lancamento Em Aberto ok.
+		//Listar todos Lancamento (Em Aberto) ok.
 		@Override
 		public List<Lancamento> buscarTudoEmAberto() {
 			PreparedStatement ps = null;
@@ -232,7 +234,7 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 			}
 		}
 	
-	// Cancelar LAncamento
+	// Cancelar LAncamento ok
 	@Override
 	public void cancelar(Lancamento obj) {
 		PreparedStatement ps = null;
@@ -250,7 +252,7 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 		}
 	}
 	
-	// Confirmar Lancamento Quitado ok
+	// Confirmar Lancamento (Quitado) ok
 	@Override
 	public void confirmarLanQuitado(Lancamento obj) {
 		PreparedStatement ps = null;
@@ -270,7 +272,7 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 		}
 	}
 
-	// Confirmar Lancamento A Pagar ok
+	// Confirmar Lancamento (A Pagar) ok
 		@Override
 		public void confirmarLanAPagar(Lancamento obj) {
 			PreparedStatement ps = null;
@@ -288,7 +290,7 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 			}
 		}
 	
-		// ok
+		//Listar todos Lançamentos (Em Aberto do mês) ok
 		public ArrayList<Lancamento> buscarContasAPagarMesAtual() {	
 			PreparedStatement ps = null;
 			ResultSet rs = null;
@@ -379,7 +381,7 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 			}
 			}
 		
-		//ok
+		//Listar todos Lançamentos (Quitados do mês) ok
 		public ArrayList<Lancamento> buscarContasQuitadoMesAtual() {	
 			PreparedStatement ps = null;
 			ResultSet rs = null;

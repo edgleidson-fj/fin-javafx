@@ -127,8 +127,8 @@ public class LanQuitadoController implements Initializable {
 		lancamentoService.salvar(obj);
 		txtId.setText(String.valueOf(obj.getId()));
 		datePickerData.setValue(LocalDate.ofInstant(obj.getData().toInstant(), ZoneId.systemDefault()));
-	//	int id = obj.getId();
-	//	idLan = id;
+		int id = obj.getId();
+		idLan = id;
 	}
 	
 	@FXML
@@ -345,7 +345,7 @@ public class LanQuitadoController implements Initializable {
 					button.setOnAction(event -> removerDespesa(obj));
 				}
 			});
-		}
+					}
 
 		private void removerDespesa(Despesa desp) {
 			Optional<ButtonType> result = Alertas.mostrarConfirmacao("Confirmação", "Tem certeza que deseja remover?");
@@ -354,19 +354,20 @@ public class LanQuitadoController implements Initializable {
 					throw new IllegalStateException("Service nulo");
 				}
 				try {
-					desp.setAtivo("N");	
-					despesaService.atualizar(desp);
 					Lancamento lan = new Lancamento();
+					lan.setId(idLan);
+					itemService.excluir(lan,desp);
+					//Total
 					total -= desp.getPreco();
 					lbTotal.setText(String.format("R$ %.2f", total));
 					lan.setId(Utils.stringParaInteiro(txtId.getText()));
 					lan.setTotal(total);
 					lancamentoService.atualizar(lan);				
-					//Carregar TableView do Lançamento 
+					//Carregar TableView do Lançamento 					
 					List<Despesa> listaDespesa = despesaService.listarPorId(lan.getId()); 
 					obsListaDespesaTbView = FXCollections.observableArrayList(listaDespesa);
 					  tbDespesa.setItems(obsListaDespesaTbView);			
-					  iniciarBotaoRemover();
+					  iniciarBotaoRemover();				
 				}
 				catch (BDIntegrityException ex) {
 					Alertas.mostrarAlerta("Erro ao remover objeto", null, ex.getMessage(), AlertType.ERROR);

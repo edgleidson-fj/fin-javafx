@@ -51,42 +51,8 @@ public class StatusDaoJDBC implements StatusDao {
 		} finally {
 			BD.fecharStatement(ps);
 		}
-	}
-
-	@Override
-	public void atualizar(Status obj) {
-		PreparedStatement ps = null;
-		try {
-			ps = connection.prepareStatement(
-					"UPDATE tipopag " 
-							+ "SET nome = ? " 
-							+ "WHERE Id = ? ");
-			ps.setString(1, obj.getNome());
-			ps.setInt(2, obj.getId());
-			ps.executeUpdate();
-		} catch (SQLException ex) {
-			new BDException(ex.getMessage());
-		} finally {
-			BD.fecharStatement(ps);
-		}
-	}
-
-	@Override
-	public void excluirPorId(Integer id) {
-		PreparedStatement ps = null;
-		try {
-			ps = connection.prepareStatement(
-					"DELETE FROM tipopag  " 
-							+ "WHERE Id = ? ");
-			ps.setInt(1, id);
-			ps.executeUpdate();
-		} catch (SQLException ex) {
-			new BDIntegrityException(ex.getMessage());
-		} finally {
-			BD.fecharStatement(ps);
-		}
-	}*/
-
+	} */
+	
 	@Override
 	public Status buscarPorId(Integer id) {
 		PreparedStatement ps = null;

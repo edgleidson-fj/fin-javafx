@@ -23,7 +23,7 @@ public class TipoPagDaoJDBC implements TipoPagDao {
 		this.connection = connection;
 	}
 
-	@Override
+	@Override //ok
 	public void inserir(TipoPag obj) {
 		PreparedStatement ps = null;
 		try {
@@ -53,7 +53,7 @@ public class TipoPagDaoJDBC implements TipoPagDao {
 		}
 	}
 
-	@Override
+	@Override //ok
 	public void atualizar(TipoPag obj) {
 		PreparedStatement ps = null;
 		try {
@@ -71,13 +71,13 @@ public class TipoPagDaoJDBC implements TipoPagDao {
 		}
 	}
 
-	@Override
+	@Override //ok
 	public void excluirPorId(Integer id) {
 		PreparedStatement ps = null;
 		try {
 			ps = connection.prepareStatement(
 					"DELETE FROM tipopag  " 
-							+ "WHERE Id = ? ");
+				 			+ "WHERE Id = ? ");
 			ps.setInt(1, id);
 			ps.executeUpdate();
 		} catch (SQLException ex) {
@@ -87,7 +87,7 @@ public class TipoPagDaoJDBC implements TipoPagDao {
 		}
 	}
 
-	@Override
+	@Override //ok
 	public TipoPag buscarPorId(Integer id) {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -115,7 +115,7 @@ public class TipoPagDaoJDBC implements TipoPagDao {
 		}
 	}
 
-	@Override
+	@Override //ok
 	public List<TipoPag> buscarTudo() {
 		PreparedStatement ps = null;
 		ResultSet rs = null;

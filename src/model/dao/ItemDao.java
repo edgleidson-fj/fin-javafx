@@ -8,7 +8,8 @@ public interface ItemDao {
 
 	void inserir(Item obj);
 	void atualizar(Item obj);
-	void excluirPorId(Integer id);
+//	void excluirPorId(Integer id);
+	void excluirPorId(Integer lanId, Integer despId);
 	Item buscarPorId(Integer id);
 	List<Item> buscarTudo();
 	List<Item> listarPorId(Integer id);

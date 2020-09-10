@@ -53,7 +53,7 @@ public class DespesaDaoJDBC implements DespesaDao {
 			BD.fecharStatement(ps);
 		}
 	}
-//--------------------------------------------------------------------------
+
 	@Override //ok
 	public void atualizar(Despesa obj) {
 		PreparedStatement ps = null;
@@ -69,7 +69,6 @@ public class DespesaDaoJDBC implements DespesaDao {
 			BD.fecharStatement(ps);
 		}
 	}
-	//-------------------------------------------------------------------------
 
 	@Override
 	public void excluirPorId(Integer id) {
@@ -84,7 +83,6 @@ public class DespesaDaoJDBC implements DespesaDao {
 			BD.fecharStatement(ps);
 		}
 	}
-//-------------------------------------------------------------------------------------	
 
 	@Override
 	public Despesa buscarPorId(Integer id) {
@@ -110,7 +108,6 @@ public class DespesaDaoJDBC implements DespesaDao {
 		}
 	}
 
-//---------------------------------------------------------------------------------------
 	@Override
 	public List<Despesa> buscarTudo() {
 		PreparedStatement ps = null;
@@ -146,9 +143,8 @@ int x = 100;
 			BD.fecharResultSet(rs);
 		}
 	}
-	//----------------------------------------------------------------------
 
-	//Listar Despesas da tela de Lancamentos.
+	//Listar Despesas da tela de Lancamentos ok.
     public List<Despesa> listarPorId(Integer id){
         PreparedStatement ps = null;
         ResultSet rs = null;
