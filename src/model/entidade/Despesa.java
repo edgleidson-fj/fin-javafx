@@ -8,17 +8,15 @@ public class Despesa implements Serializable{
 	private Integer id;
 	private String nome;
 	private Double preco;
-	private String ativo; // teste.
 	
 	public Despesa() {
 		}
 
-	public Despesa(Integer id, String nome, Double preco, String ativo) {
+	public Despesa(Integer id, String nome, Double preco) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.preco = preco;
-		this.ativo = ativo;
 	}
 
 	public Integer getId() {
@@ -45,15 +43,7 @@ public class Despesa implements Serializable{
 		this.preco = preco;
 	}
 
-	public String getAtivo() {
-		return ativo;
-	}
 
-	public void setAtivo(String ativo) {
-		this.ativo = ativo;
-	}
-
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

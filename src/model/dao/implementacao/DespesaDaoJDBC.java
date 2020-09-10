@@ -30,12 +30,11 @@ public class DespesaDaoJDBC implements DespesaDao {
 		try {
 			ps = connection.prepareStatement(
 					"INSERT INTO despesa "
-						+ "(nome, preco, ativo) "
-							+ "VALUES  ( ?, ?, ?) ",
+						+ "(nome, preco) "
+							+ "VALUES  ( ?, ?) ",
 							Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, obj.getNome());
 			ps.setDouble(2, obj.getPreco());
-			ps.setString(3, obj.getAtivo());
 			int linhasAfetadas = ps.executeUpdate();
 			if (linhasAfetadas > 0) {
 				ResultSet rs = ps.getGeneratedKeys(); // ID gerado no Insert.
@@ -54,13 +53,13 @@ public class DespesaDaoJDBC implements DespesaDao {
 		}
 	}
 
-	@Override //ok
+	@Override //Falta testar
 	public void atualizar(Despesa obj) {
 		PreparedStatement ps = null;
 		try {
 			ps = connection.prepareStatement(" update despesa set ativo = ?  where id = ? ");
 
-			ps.setString(1, obj.getAtivo());
+//			ps.setString(1, obj.getAtivo());
 			ps.setInt(2, obj.getId());
 			ps.executeUpdate();
 		} catch (SQLException ex) {
@@ -70,7 +69,7 @@ public class DespesaDaoJDBC implements DespesaDao {
 		}
 	}
 
-	@Override
+	@Override //Falta testar
 	public void excluirPorId(Integer id) {
 		PreparedStatement ps = null;
 		try {
@@ -84,7 +83,7 @@ public class DespesaDaoJDBC implements DespesaDao {
 		}
 	}
 
-	@Override
+	@Override //Falta testar
 	public Despesa buscarPorId(Integer id) {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -108,14 +107,14 @@ public class DespesaDaoJDBC implements DespesaDao {
 		}
 	}
 
-	@Override
+	@Override //Falta testar
 	public List<Despesa> buscarTudo() {
 		PreparedStatement ps = null;
 		PreparedStatement ps1 = null;
 		ResultSet rs = null;
 		try {
 	//		ps = connection.prepareStatement("SELECT * FROM despesa " + " ORDER BY nome ");
-int x = 100;
+			int x = 100;
 	
 			ps = connection.prepareStatement(
 					"SELECT *  "
@@ -148,18 +147,15 @@ int x = 100;
     public List<Despesa> listarPorId(Integer id){
         PreparedStatement ps = null;
         ResultSet rs = null;
-        String sim = "S";
      try {
     	 ps = connection.prepareStatement(
         		"SELECT * "
         				+ "from lancamento as l, item as i, despesa as d "	
         				+ "where l.id = i.lancamento_id "
         				+ "and i.despesa_id = d.id "
-        				+ "and l.id = ? and d.ativo = '"+ sim +"' ");
-     
+        				+ "and l.id = ?");     
     	 ps.setInt(1, id);
-        rs = ps.executeQuery();
-        
+        rs = ps.executeQuery();        
         List<Despesa> lista = new ArrayList<Despesa>();
         while(rs.next()){
             Despesa d = new Despesa();

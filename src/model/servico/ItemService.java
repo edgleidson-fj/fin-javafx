@@ -23,11 +23,7 @@ public class ItemService {
 	public void atualizar(Item obj) {
 			dao.atualizar(obj);
 		}
-	
-/*	public void excluir (Item obj) {
-//		dao.excluirPorId(obj.getId());
-	}*/
-	
+		
 	public void excluir (Lancamento lanId, Despesa despId) {
 	dao.excluirPorId(lanId.getId(), despId.getId());
 	}
