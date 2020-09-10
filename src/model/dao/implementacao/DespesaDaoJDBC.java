@@ -18,12 +18,11 @@ import model.entidade.Lancamento;
 public class DespesaDaoJDBC implements DespesaDao {
 
 	private Connection connection;
-
-	// Força injeção de dependencia (Connection) dentro da Classe.
 	public DespesaDaoJDBC(Connection connection) {
 		this.connection = connection;
 	}
 //-------------------------------------------------------------------
+
 	@Override //ok
 	public void inserir(Despesa obj) {
 		PreparedStatement ps = null;

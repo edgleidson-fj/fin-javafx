@@ -1,20 +1,35 @@
 package gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
+import bd.BDIntegrityException;
+import gui.util.Alertas;
 import gui.util.Utils;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import model.entidade.Lancamento;
 import model.entidade.TipoPag;
+import model.servico.DespesaService;
 import model.servico.LancamentoService;
 import model.servico.TipoPagService;
 
@@ -38,36 +53,32 @@ public class ContasQuitadasController implements Initializable {
 	private TableColumn<Lancamento, Double> colunaLanValor;
 	@FXML
 	private TableColumn<Lancamento, TipoPag> colunaTipoPag;
-//	@FXML
-//	private TableColumn<TipoPag, TipoPag> colunaTipoPag;
+	@FXML
+	private TableColumn<Lancamento, Lancamento> colunaDetalhe;
 	// -----------------------------------------------------
 
 	private ObservableList<Lancamento> obsListaLancamentoTbView;
 	// -----------------------------------------------------
-	
-	
+
 	public void setLancamentoService(LancamentoService lancamentoService) {
 		this.lancamentoService = lancamentoService;
 	}
-
 	public void setLancamento(Lancamento lancamentoEntidade) {
 		this.lancamentoEntidade = lancamentoEntidade;
 	}
-	
 	public void setTipoPagService(TipoPagService tipoPagService) {
 		this.tipoPagService = tipoPagService;
 	}
-
 	public void setTipoPag(TipoPag tipoPagEntidade) {
 		this.tipoPagEntidade = tipoPagEntidade;
 	}
-
-	//----------------------------------------------------------
+	// ----------------------------------------------------------
+	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		inicializarNodes();
 	}
-	
+
 	private void inicializarNodes() {
 		colunaLanData.setCellValueFactory(new PropertyValueFactory<>("data"));
 		Utils.formatTableColumnData(colunaLanData, "dd/MM/yyyy");
@@ -76,19 +87,61 @@ public class ContasQuitadasController implements Initializable {
 		colunaLanValor.setCellValueFactory(new PropertyValueFactory<>("total"));
 		Utils.formatTableColumnValorDecimais(colunaLanValor, 2); // Formatar com(0,00)
 		colunaTipoPag.setCellValueFactory(new PropertyValueFactory<>("tipoPagamento"));
-	
 	}
-	
+
 	public void carregarTableView() {
 		if (lancamentoService == null) {
 			throw new IllegalStateException("Service was null");
 		}
-		List<Lancamento> lista = lancamentoService.buscarTudoQuitado(); 
+		List<Lancamento> lista = lancamentoService.buscarTudoQuitado();
 		obsListaLancamentoTbView = FXCollections.observableArrayList(lista);
-		  tbLancamento.setItems(obsListaLancamentoTbView);			
-		  // Botão Detalhe(); //
+		tbLancamento.setItems(obsListaLancamentoTbView);
+		criarBotaoDetalhe();
 	}
-	// -----------------------------------------------------------------
 
+	// Detalhe do Lançamento.
+	public void criarDialogForm(Lancamento obj, String nomeAbsoluto, Stage stagePai) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(nomeAbsoluto));
+			Pane painel = loader.load();
+			// Referencia para controlador.
+			DetalheDialogFormController controle = loader.getController();
+			controle.setLancamento(obj);
+			controle.setLancamentoService(new LancamentoService());
+			controle.setDespesaService(new DespesaService());
+			controle.atualizarDialogForm();
+			controle.carregarTableView();
+			// Caixa de Dialogo.
+			Stage stageDialog = new Stage();
+			stageDialog.setTitle("Informe os dados do Lancamento");
+			stageDialog.setScene(new Scene(painel));
+			stageDialog.setResizable(false); // Redimencionavel.
+			stageDialog.initOwner(stagePai); // Stage pai da janela.
+			stageDialog.initModality(Modality.WINDOW_MODAL); // Impedir o acesso de outras janela.
+			stageDialog.showAndWait();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			Alertas.mostrarAlerta("IO Exception", "Erro ao carregar View", ex.getMessage(), AlertType.ERROR);
+		}
+	}
 
+	private void criarBotaoDetalhe() {
+		colunaDetalhe.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		colunaDetalhe.setCellFactory(param -> new TableCell<Lancamento, Lancamento>() {
+			private final Button botao = new Button("+");
+
+			@Override
+			protected void updateItem(Lancamento obj, boolean vazio) {
+				super.updateItem(obj, vazio);
+
+				if (obj == null) {
+					setGraphic(null);
+					return;
+				}
+				setGraphic(botao);
+				botao.setOnAction(
+						evento -> criarDialogForm(obj, "/gui/DetalheDialogFormView.fxml", Utils.stageAtual(evento)));
+			}
+		});
+	}
 }

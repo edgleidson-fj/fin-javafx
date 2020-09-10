@@ -152,7 +152,6 @@ public class LanAPagarController implements Initializable {
 		List<Despesa> listaDespesa = despesaService.listarPorId(obj.getId()); 
 		obsListaDespesaTbView = FXCollections.observableArrayList(listaDespesa);
 		  tbDespesa.setItems(obsListaDespesaTbView);			
-		  // initEditButtons(); //
 		  iniciarBotaoRemover();
 		 }
 
@@ -196,23 +195,18 @@ public class LanAPagarController implements Initializable {
 	public void setLancamentoService(LancamentoService lancamentoService) {
 		this.lancamentoService = lancamentoService;
 	}
-
 	public void setLancamento(Lancamento lancamentoEntidade) {
 		this.lancamentoEntidade = lancamentoEntidade;
 	}
-
 	public void setItemService(ItemService itemService) {
 		this.itemService = itemService;
 	}
-
 	public void setItem(Item itemEntidade) {
 		this.itemEntidade = itemEntidade;
 	}
-
 	public void setDespesaService(DespesaService despesaService) {
 		this.despesaService = despesaService;
 	}
-
 	public void setDespesa(Despesa despesaEntidade) {
 		this.despesaEntidade = despesaEntidade;
 	}
@@ -223,19 +217,16 @@ public class LanAPagarController implements Initializable {
 		inicializarNodes();
 	}
 
-	// ------------------------------------------------------------------
 	public void carregarCamposDeCadastro() {
 		txtId.setText(String.valueOf(lancamentoEntidade.getId()));
 	}
-	// -----------------------------------------------------------------------------------------------------
-
+	
 	private void inicializarNodes() {
 		Restricoes.setTextFieldInteger(txtId);
 		Restricoes.setTextFieldTamanhoMaximo(txtReferencia, 50);
 		Restricoes.setTextFieldDouble(txtPreco);
 		Restricoes.setTextFieldTamanhoMaximo(txtItem, 30);
 		Utils.formatDatePicker(datePickerData, "dd/MM/yyyy");
-
 		colunaDespId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		colunaDespNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
 		colunaDespValor.setCellValueFactory(new PropertyValueFactory<>("preco"));
