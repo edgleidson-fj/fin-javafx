@@ -1,23 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
 
 <HBox prefHeight="389.0" prefWidth="533.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.DetalheDialogFormController">
    <children>
       <AnchorPane prefHeight="389.0" prefWidth="534.0">
          <children>
-            <TextField fx:id="txtId" layoutX="39.0" layoutY="24.0" promptText="id lan" />
-            <TableView fx:id="tbDespesa" layoutX="43.0" layoutY="107.0" prefHeight="200.0" prefWidth="443.0">
+            <TextField fx:id="txtId" editable="false" layoutX="39.0" layoutY="24.0" prefHeight="25.0" prefWidth="59.0" promptText="id lan" AnchorPane.bottomAnchor="340.0" AnchorPane.leftAnchor="39.0" AnchorPane.rightAnchor="436.0" AnchorPane.topAnchor="24.0" />
+            <TableView fx:id="tbDespesa" layoutX="46.0" layoutY="80.0" prefHeight="200.0" prefWidth="443.0" AnchorPane.bottomAnchor="109.0" AnchorPane.leftAnchor="46.0" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="80.0">
               <columns>
                 <TableColumn fx:id="colunaDespId" prefWidth="75.0" text="Código" />
                 <TableColumn fx:id="colunaDespNome" prefWidth="265.0" text="Item" />
                   <TableColumn fx:id="colunaDespValor" prefWidth="102.0" text="Valor" />
               </columns>
             </TableView>
+            <TextField layoutX="118.0" layoutY="24.0" prefHeight="25.0" prefWidth="235.0" promptText="Referência" AnchorPane.topAnchor="24.0" />
+            <TextField layoutX="361.0" layoutY="24.0" promptText="data" />
+            <Label layoutX="361.0" layoutY="311.0" text="TOTAL" textFill="#3008f8">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="436.0" layoutY="311.0" text="0.00" textFill="#3008f8">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </children>

@@ -52,6 +52,8 @@ public class ContasEmAbertoController implements Initializable {
 	@FXML
 	private TableColumn<Lancamento, Lancamento> colunaDetalhe;
 	@FXML
+	private TableColumn<Lancamento, Lancamento> colunaPagar;
+	@FXML
 	private Label lbTotal;
 	// -----------------------------------------------------
 
@@ -94,6 +96,7 @@ public class ContasEmAbertoController implements Initializable {
 		obsListaLancamentoTbView = FXCollections.observableArrayList(lista);
 		tbLancamento.setItems(obsListaLancamentoTbView);
 		criarBotaoDetalhe();
+		criarBotaoPagar();
 		// Valor Total
 		Double soma = 0.0;
 		for (Lancamento tab : obsListaLancamentoTbView) {
@@ -102,18 +105,30 @@ public class ContasEmAbertoController implements Initializable {
 		lbTotal.setText(String.format("R$ %.2f", soma));
 	}
 
-	// Detalhe do Lançamento.
-	public void criarDialogForm(Lancamento obj, String nomeAbsoluto, Stage stagePai) {
+	public void criarDialogForm(Lancamento obj, String nomeAbsoluto, Stage stagePai, String dialogForm) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(nomeAbsoluto));
 			Pane painel = loader.load();
 			// Referencia para controlador.
-			DetalheDialogFormController controle = loader.getController();
-			controle.setLancamento(obj);
-			controle.setLancamentoService(new LancamentoService());
-			controle.setDespesaService(new DespesaService());
-			controle.atualizarDialogForm();
-			controle.carregarTableView();
+			if(dialogForm == "detalhe") {
+				DetalheDialogFormController controle = loader.getController();
+				controle.setLancamento(obj);
+				controle.setLancamentoService(new LancamentoService());
+				controle.setDespesaService(new DespesaService());
+				controle.atualizarDialogForm();
+				controle.carregarTableView();
+				}
+				else {
+				PagamentoDialogFormController controle = loader.getController();
+				controle.setLancamento(obj);
+				controle.setLancamentoService(new LancamentoService());
+				controle.setDespesaService(new DespesaService());
+				controle.setTipoPag(new TipoPag());
+				controle.setTipoPagService(new TipoPagService());
+				controle.atualizarDialogForm();			
+				controle.carregarTableView();
+				controle.carregarObjetosAssociados();
+				}
 			// Caixa de Dialogo.
 			Stage stageDialog = new Stage();
 			stageDialog.setTitle("Informe os dados do Lancamento");
@@ -141,8 +156,29 @@ public class ContasEmAbertoController implements Initializable {
 					return;
 				}
 				setGraphic(botao);
+				String dialogForm = "detalhe";
 				botao.setOnAction(
-						evento -> criarDialogForm(obj, "/gui/DetalheDialogFormView.fxml", Utils.stageAtual(evento)));
+						evento -> criarDialogForm(obj, "/gui/DetalheDialogFormView.fxml", Utils.stageAtual(evento), dialogForm));
+			}
+		});
+	}
+	
+	private void criarBotaoPagar() {
+		colunaPagar.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		colunaPagar.setCellFactory(param -> new TableCell<Lancamento, Lancamento>() {
+			private final Button botao = new Button("$");
+
+			@Override
+			protected void updateItem(Lancamento obj, boolean vazio) {
+				super.updateItem(obj, vazio);
+				if (obj == null) {
+					setGraphic(null);
+					return;
+				}
+				setGraphic(botao);
+				String dialogForm = "pagar";
+				botao.setOnAction(
+						evento -> criarDialogForm(obj, "/gui/PagamentoDialogFormView.fxml", Utils.stageAtual(evento), dialogForm));
 			}
 		});
 	}
