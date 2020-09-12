@@ -57,6 +57,10 @@ public class PagamentoDialogFormController implements Initializable{
 		private TextField txtId;
 		@FXML
 		private TextField txtRef;
+		@FXML
+		private TextField txtDesconto;
+		@FXML
+		private TextField txtAcrescimo;
 //		@FXML
 //		private TextField txtData;
 		@FXML
@@ -87,7 +91,14 @@ public class PagamentoDialogFormController implements Initializable{
 			Lancamento obj = new Lancamento();
 			obj.setId(Utils.stringParaInteiro(txtId.getText()));
 			obj.setTipoPagamento(cmbTipoPag.getValue());
-			lancamentoService.confirmarLanQuitado(obj);
+			//Desconto-Acréscimo
+			double total= Utils.stringParaDouble(lbTotal.getText());
+			total -= Utils.stringParaDouble(txtDesconto.getText());
+			total += Utils.stringParaDouble(txtAcrescimo.getText());	
+			obj.setDesconto(Utils.stringParaDouble(txtDesconto.getText()));
+			obj.setAcrescimo(Utils.stringParaDouble(txtAcrescimo.getText()));
+			obj.setTotal(total);
+			lancamentoService.confirmarPagamento(obj);
 			Utils.stageAtual(evento).close();
 			carregarPropriaView("/gui/ContasEmAbertoMesAtualView.fxml", (ContasEmAbertoMesAtualController controller) -> {
 				controller.setLancamentoService(new LancamentoService());
@@ -141,6 +152,8 @@ public class PagamentoDialogFormController implements Initializable{
 				txtRef.setText(lancamentoEntidade.getReferencia());
 				lbTotal.setText(String.format("%.2f",lancamentoEntidade.getTotal()));
 			//	txtData.setText(String.valueOf(lancamentoEntidade.getData()));
+				txtDesconto.setText(String.valueOf(0));
+				txtAcrescimo.setText(String.valueOf(0));
 		}
 		
 		public void carregarTableView() {

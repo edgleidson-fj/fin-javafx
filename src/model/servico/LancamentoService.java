@@ -55,4 +55,8 @@ public class LancamentoService {
 	public void confirmarLanAPagar(Lancamento obj) {
 		dao.confirmarLanAPagar(obj);
 		}
+	
+	public void confirmarPagamento(Lancamento obj) {
+		dao.confirmarPagamento(obj);
+		}
 }

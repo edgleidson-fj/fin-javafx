@@ -260,7 +260,7 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 		try {
 			ps = connection.prepareStatement("UPDATE lancamento " 
 		+ "SET tipopag_id = ?, "
-		+" status_id = '"+status+"' "
+		+"status_id = '"+status+"' "
 		+ "WHERE Id = ? ");
 			ps.setInt(1, obj.getTipoPagamento().getId());
 			ps.setInt(2, obj.getId());
@@ -271,6 +271,32 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 			BD.fecharStatement(ps);
 		}
 	}
+	
+	@Override
+	public void confirmarPagamento(Lancamento obj) {
+		PreparedStatement ps = null;
+		int status = 2; //Pago.
+		try {
+			ps = connection.prepareStatement("UPDATE lancamento " 
+		+ "SET tipopag_id = ?, "
+		+"status_id = '"+status+"', "
+		+"total = ?, "
+		+"desconto = ?, "
+		+"acrescimo = ? "
+		+ "WHERE Id = ? ");
+			ps.setInt(1, obj.getTipoPagamento().getId());
+			ps.setDouble(2, obj.getTotal());
+			ps.setDouble(3, obj.getDesconto());
+			ps.setDouble(4, obj.getAcrescimo());
+			ps.setInt(5, obj.getId());
+			ps.executeUpdate();
+		} catch (SQLException ex) {
+			new BDException(ex.getMessage());
+		} finally {
+			BD.fecharStatement(ps);
+		}
+	}
+
 
 	// Confirmar Lancamento (A Pagar) ok
 		@Override
