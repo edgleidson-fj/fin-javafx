@@ -2,6 +2,9 @@ package gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
@@ -21,6 +24,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
@@ -50,6 +55,12 @@ public class PagamentoDialogFormController implements Initializable{
 
 		@FXML
 		private TextField txtId;
+		@FXML
+		private TextField txtRef;
+//		@FXML
+//		private TextField txtData;
+		@FXML
+		private Label lbTotal;
 		@FXML
 		private TableView<Despesa> tbDespesa;
 		@FXML
@@ -127,6 +138,9 @@ public class PagamentoDialogFormController implements Initializable{
 		
 		public void atualizarDialogForm() {
 				txtId.setText(String.valueOf(lancamentoEntidade.getId())); 
+				txtRef.setText(lancamentoEntidade.getReferencia());
+				lbTotal.setText(String.format("%.2f",lancamentoEntidade.getTotal()));
+			//	txtData.setText(String.valueOf(lancamentoEntidade.getData()));
 		}
 		
 		public void carregarTableView() {

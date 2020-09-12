@@ -113,7 +113,7 @@ public class ContasQuitadasController implements Initializable {
 			controle.carregarTableView();
 			// Caixa de Dialogo.
 			Stage stageDialog = new Stage();
-			stageDialog.setTitle("Informe os dados do Lancamento");
+			stageDialog.setTitle("");
 			stageDialog.setScene(new Scene(painel));
 			stageDialog.setResizable(false); // Redimencionavel.
 			stageDialog.initOwner(stagePai); // Stage pai da janela.

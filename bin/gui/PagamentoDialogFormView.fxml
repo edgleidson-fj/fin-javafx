@@ -12,9 +12,9 @@
 
 <HBox prefHeight="389.0" prefWidth="533.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.PagamentoDialogFormController">
    <children>
-      <AnchorPane prefHeight="389.0" prefWidth="534.0">
+      <AnchorPane fx:id="txtData" prefHeight="389.0" prefWidth="534.0">
          <children>
-            <TextField fx:id="txtId" editable="false" layoutX="39.0" layoutY="24.0" prefHeight="25.0" prefWidth="59.0" promptText="id lan" AnchorPane.bottomAnchor="340.0" AnchorPane.leftAnchor="39.0" AnchorPane.rightAnchor="436.0" AnchorPane.topAnchor="24.0" />
+            <TextField fx:id="txtId" editable="false" layoutX="40.0" layoutY="43.0" prefHeight="25.0" prefWidth="59.0" promptText="id lan" AnchorPane.bottomAnchor="321.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="435.0" AnchorPane.topAnchor="43.0" />
             <TableView fx:id="tbDespesa" layoutX="46.0" layoutY="80.0" prefHeight="200.0" prefWidth="443.0" AnchorPane.bottomAnchor="109.0" AnchorPane.leftAnchor="46.0" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="80.0">
               <columns>
                 <TableColumn fx:id="colunaDespId" prefWidth="75.0" text="Código" />
@@ -22,22 +22,27 @@
                   <TableColumn fx:id="colunaDespValor" prefWidth="102.0" text="Valor" />
               </columns>
             </TableView>
-            <TextField layoutX="118.0" layoutY="24.0" prefHeight="25.0" prefWidth="235.0" promptText="Referência" AnchorPane.topAnchor="24.0" />
-            <TextField layoutX="361.0" layoutY="24.0" promptText="data" />
+            <TextField fx:id="txtRef" editable="false" layoutX="118.0" layoutY="24.0" prefHeight="25.0" prefWidth="235.0" promptText="Referência" AnchorPane.bottomAnchor="321.0" AnchorPane.leftAnchor="118.0" AnchorPane.rightAnchor="181.0" AnchorPane.topAnchor="43.0" />
+            <TextField editable="false" layoutX="361.0" layoutY="24.0" prefHeight="25.0" prefWidth="128.0" promptText="Falta Implementar" AnchorPane.bottomAnchor="321.0" AnchorPane.leftAnchor="361.0" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="43.0" />
             <Label layoutX="361.0" layoutY="311.0" text="TOTAL" textFill="#3008f8">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Label layoutX="436.0" layoutY="311.0" text="0.00" textFill="#3008f8">
+            <Label fx:id="lbTotal" layoutX="436.0" layoutY="311.0" text="0.00" textFill="#3008f8">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
             <Label layoutX="40.0" layoutY="303.0" text="Forma de Pagamento:" />
             <ComboBox fx:id="cmbTipoPag" layoutX="161.0" layoutY="299.0" prefWidth="150.0" />
-            <Button fx:id="btConfirmar" layoutX="46.0" layoutY="338.0" mnemonicParsing="false" onAction="#onBtConfirmar" text="Confirma" />
-            <Button fx:id="btVoltar" layoutX="135.0" layoutY="338.0" mnemonicParsing="false" onAction="#onBtVoltar" text="Voltar" />
+            <Button fx:id="btConfirmar" layoutX="46.0" layoutY="338.0" mnemonicParsing="false" onAction="#onBtConfirmar" text="Confirma" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="46.0" AnchorPane.rightAnchor="423.0" AnchorPane.topAnchor="338.0" />
+            <Button fx:id="btVoltar" layoutX="135.0" layoutY="338.0" mnemonicParsing="false" onAction="#onBtVoltar" text="Voltar" AnchorPane.topAnchor="338.0" />
+            <Label layoutX="161.0" layoutY="14.0" text="ÁREA DE PAGAMENTO" AnchorPane.bottomAnchor="348.0" AnchorPane.leftAnchor="170.0" AnchorPane.topAnchor="14.0">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </children>

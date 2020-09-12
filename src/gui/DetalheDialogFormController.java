@@ -12,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -31,6 +32,12 @@ public class DetalheDialogFormController implements Initializable{
 
 		@FXML
 		private TextField txtId;
+		@FXML
+		private TextField txtRef;
+//		@FXML
+//		private TextField txtData;
+		@FXML
+		private Label lbTotal;
 		@FXML
 		private TableView<Despesa> tbDespesa;
 		@FXML
@@ -80,7 +87,9 @@ public class DetalheDialogFormController implements Initializable{
 		}
 		
 		public void atualizarDialogForm() {
-				txtId.setText(String.valueOf(lancamentoEntidade.getId())); 
+			txtId.setText(String.valueOf(lancamentoEntidade.getId())); 
+			txtRef.setText(lancamentoEntidade.getReferencia());
+			lbTotal.setText(String.format("%.2f",lancamentoEntidade.getTotal()));
 		}
 		
 		public void carregarTableView() {
