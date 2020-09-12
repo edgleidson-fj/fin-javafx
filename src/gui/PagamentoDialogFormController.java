@@ -79,6 +79,8 @@ public class PagamentoDialogFormController implements Initializable{
 		private Button btConfirmar;
 		@FXML
 		private Button btVoltar;
+		@FXML
+		private Button btAtualizarTotal;
 		//----------------------------------------------------------
 
 		private ObservableList<Despesa> obsListaDespesaTbView;
@@ -110,6 +112,15 @@ public class PagamentoDialogFormController implements Initializable{
 		@FXML
 		public void onBtVoltar(ActionEvent evento) {
 			Utils.stageAtual(evento).close();
+		}
+		
+		public void onBtAtualizarTotal() {
+			double total= Utils.stringParaDouble(lbTotal.getText());
+			total -= Utils.stringParaDouble(txtDesconto.getText());
+			total += Utils.stringParaDouble(txtAcrescimo.getText());	
+			lbTotal.setText(String.format("%.2f", total));
+			txtDesconto.setText(String.valueOf(0));
+			txtAcrescimo.setText(String.valueOf(0));
 		}
 		//-----------------------------------------------
 		
@@ -145,7 +156,7 @@ public class PagamentoDialogFormController implements Initializable{
 			colunaDespNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
 			colunaDespValor.setCellValueFactory(new PropertyValueFactory<>("preco"));
 			Utils.formatTableColumnValorDecimais(colunaDespValor, 2); // Formatar com(0,00)
-		}
+		}		
 		
 		public void atualizarDialogForm() {
 				txtId.setText(String.valueOf(lancamentoEntidade.getId())); 
@@ -153,7 +164,7 @@ public class PagamentoDialogFormController implements Initializable{
 				lbTotal.setText(String.format("%.2f",lancamentoEntidade.getTotal()));
 			//	txtData.setText(String.valueOf(lancamentoEntidade.getData()));
 				txtDesconto.setText(String.valueOf(0));
-				txtAcrescimo.setText(String.valueOf(0));
+				txtAcrescimo.setText(String.valueOf(0));				
 		}
 		
 		public void carregarTableView() {
