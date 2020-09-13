@@ -22,79 +22,90 @@ import model.entidade.Lancamento;
 import model.servico.DespesaService;
 import model.servico.LancamentoService;
 
-public class DetalheDialogFormController implements Initializable{
+public class DetalheDialogFormController implements Initializable {
 
-		private Despesa despesaEntidade;
-		private DespesaService despesaService;
-		private Lancamento lancamentoEntidade;
-		private LancamentoService lancamentoService;
-	//---------------------------------------------
+	private Despesa despesaEntidade;
+	private DespesaService despesaService;
+	private Lancamento lancamentoEntidade;
+	private LancamentoService lancamentoService;
+	// ---------------------------------------------
 
-		@FXML
-		private TextField txtId;
-		@FXML
-		private TextField txtRef;
+	@FXML
+	private TextField txtId;
+	@FXML
+	private TextField txtRef;
 //		@FXML
 //		private TextField txtData;
-		@FXML
-		private Label lbTotal;
-		@FXML
-		private TableView<Despesa> tbDespesa;
-		@FXML
-		private TableColumn<Despesa, Integer> colunaDespId;
-		@FXML
-		private TableColumn<Despesa, String> colunaDespNome;
-		@FXML
-		private TableColumn<Despesa, Double> colunaDespValor;
-		@FXML
-		private Button btVoltar;
-		//-----------------------------------------------------------------
+	@FXML
+	private Label lbTotal;
+	@FXML
+	private Label lbDescontoAcrescimo;
+	@FXML
+	private TableView<Despesa> tbDespesa;
+	@FXML
+	private TableColumn<Despesa, Integer> colunaDespId;
+	@FXML
+	private TableColumn<Despesa, String> colunaDespNome;
+	@FXML
+	private TableColumn<Despesa, Double> colunaDespValor;
+	@FXML
+	private Button btVoltar;
+	// -----------------------------------------------------------------
 
-		private ObservableList<Despesa> obsListaDespesaTbView;
+	private ObservableList<Despesa> obsListaDespesaTbView;
 	// ---------------------------------------------------------
-	
-		public void setDespesa(Despesa despesaEntidade) {
-			this.despesaEntidade = despesaEntidade;
-		}		
-		public void setDespesaService(DespesaService despesaService) {
-			this.despesaService = despesaService;
-		}
-		public void setLancamento(Lancamento lancamentoEntidade) {
-			this.lancamentoEntidade = lancamentoEntidade;
-		}		
-		public void setLancamentoService(LancamentoService lancamentoService) {
-			this.lancamentoService = lancamentoService;
-		}
-		//----------------------------------------------------------------
 
-		@FXML
-		public void onBtVoltar(ActionEvent evento) {
-			Utils.stageAtual(evento).close();
-		}
-		//-----------------------------------------------
+	public void setDespesa(Despesa despesaEntidade) {
+		this.despesaEntidade = despesaEntidade;
+	}
 
-		@Override
-		public void initialize(URL url, ResourceBundle rb) {
-			inicializarNodes();			
-			}
+	public void setDespesaService(DespesaService despesaService) {
+		this.despesaService = despesaService;
+	}
 
-		private void inicializarNodes() {
-			Restricoes.setTextFieldInteger(txtId);	
-			colunaDespId.setCellValueFactory(new PropertyValueFactory<>("id"));
-			colunaDespNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
-			colunaDespValor.setCellValueFactory(new PropertyValueFactory<>("preco"));
-			Utils.formatTableColumnValorDecimais(colunaDespValor, 2); // Formatar com(0,00)
+	public void setLancamento(Lancamento lancamentoEntidade) {
+		this.lancamentoEntidade = lancamentoEntidade;
+	}
+
+	public void setLancamentoService(LancamentoService lancamentoService) {
+		this.lancamentoService = lancamentoService;
+	}
+	// ----------------------------------------------------------------
+
+	@FXML
+	public void onBtVoltar(ActionEvent evento) {
+		Utils.stageAtual(evento).close();
+	}
+	// -----------------------------------------------
+
+	@Override
+	public void initialize(URL url, ResourceBundle rb) {
+		inicializarNodes();
+	}
+
+	private void inicializarNodes() {
+		Restricoes.setTextFieldInteger(txtId);
+		colunaDespId.setCellValueFactory(new PropertyValueFactory<>("id"));
+		colunaDespNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
+		colunaDespValor.setCellValueFactory(new PropertyValueFactory<>("preco"));
+		Utils.formatTableColumnValorDecimais(colunaDespValor, 2); // Formatar com(0,00)
+	}
+
+	public void atualizarDialogForm() {
+		txtId.setText(String.valueOf(lancamentoEntidade.getId()));
+		txtRef.setText(lancamentoEntidade.getReferencia());
+		lbTotal.setText(String.format("%.2f", lancamentoEntidade.getTotal()));
+		if (lancamentoEntidade.getDesconto() != 0) {
+			lbDescontoAcrescimo.setText(String.format("Desconto %.2f",lancamentoEntidade.getDesconto()));
 		}
-		
-		public void atualizarDialogForm() {
-			txtId.setText(String.valueOf(lancamentoEntidade.getId())); 
-			txtRef.setText(lancamentoEntidade.getReferencia());
-			lbTotal.setText(String.format("%.2f",lancamentoEntidade.getTotal()));
+		if (lancamentoEntidade.getAcrescimo() != 0) {
+			lbDescontoAcrescimo.setText(String.format("Acréscimo %.2f",lancamentoEntidade.getAcrescimo()));
 		}
-		
-		public void carregarTableView() {
-			List<Despesa> listaDespesa = despesaService.listarPorId(lancamentoEntidade.getId());
-			obsListaDespesaTbView = FXCollections.observableArrayList(listaDespesa);
-			  tbDespesa.setItems(obsListaDespesaTbView);	
-		}		
+	}
+
+	public void carregarTableView() {
+		List<Despesa> listaDespesa = despesaService.listarPorId(lancamentoEntidade.getId());
+		obsListaDespesaTbView = FXCollections.observableArrayList(listaDespesa);
+		tbDespesa.setItems(obsListaDespesaTbView);
+	}
 }

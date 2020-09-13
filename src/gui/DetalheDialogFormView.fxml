@@ -23,12 +23,12 @@
             </TableView>
             <TextField fx:id="txtRef" editable="false" layoutX="118.0" layoutY="24.0" prefHeight="25.0" prefWidth="235.0" promptText="Referência" AnchorPane.topAnchor="43.0" />
             <TextField editable="false" layoutX="361.0" layoutY="24.0" prefHeight="25.0" prefWidth="130.0" promptText="Falta Implementar" AnchorPane.topAnchor="43.0" />
-            <Label layoutX="361.0" layoutY="311.0" text="TOTAL" textFill="#3008f8">
+            <Label layoutX="361.0" layoutY="311.0" text="TOTAL" textFill="#3008f8" AnchorPane.leftAnchor="361.0" AnchorPane.topAnchor="350.0">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Label fx:id="lbTotal" layoutX="436.0" layoutY="311.0" text="0.00" textFill="#3008f8">
+            <Label fx:id="lbTotal" layoutX="436.0" layoutY="311.0" text="0.00" textFill="#3008f8" AnchorPane.leftAnchor="436.0" AnchorPane.topAnchor="350.0">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -39,6 +39,11 @@
                </font>
             </Label>
             <Button fx:id="btVoltar" layoutX="72.0" layoutY="312.0" mnemonicParsing="false" onAction="#onBtVoltar" text="Voltar" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="338.0" />
+            <Label fx:id="lbDescontoAcrescimo" layoutX="412.0" layoutY="305.0" AnchorPane.leftAnchor="361.0">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </children>

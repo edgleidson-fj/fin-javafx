@@ -192,6 +192,8 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 					obj.setId(rs.getInt("id"));
 					obj.setReferencia(rs.getString("referencia"));
 					obj.setTotal(rs.getDouble("total"));
+					obj.setDesconto(rs.getDouble("desconto"));
+					obj.setAcrescimo(rs.getDouble("acrescimo"));
 					obj.setTipoPagamento(pag);				
 					lista.add(obj);
 				}

@@ -52,7 +52,7 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Label fx:id="lbOutro" layoutX="361.0" layoutY="278.0" AnchorPane.leftAnchor="436.0">
+            <Label fx:id="lbOutro" layoutX="361.0" layoutY="278.0" AnchorPane.leftAnchor="435.0">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
