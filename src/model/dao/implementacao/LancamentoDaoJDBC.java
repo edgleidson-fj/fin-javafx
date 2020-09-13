@@ -225,6 +225,8 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 					obj.setId(rs.getInt("id"));
 					obj.setReferencia(rs.getString("referencia"));
 					obj.setTotal(rs.getDouble("total"));
+					obj.setDesconto(rs.getDouble("desconto"));
+					obj.setAcrescimo(rs.getDouble("acrescimo"));
 					lista.add(obj);
 				}
 				return lista;
@@ -396,7 +398,9 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 				l.setReferencia(rs.getString("lancamento.referencia"));
 				l.setData(rs.getDate("lancamento.data"));
 				l.setTotal(rs.getDouble("lancamento.total"));
-				itens.add(l);
+				l.setDesconto(rs.getDouble("lancamento.desconto"));
+				l.setAcrescimo(rs.getDouble("lancamento.acrescimo"));					
+		        itens.add(l);
 			}			
 			return itens;
 		}
@@ -503,6 +507,8 @@ public class LancamentoDaoJDBC implements LancamentoDao {
 				l.setReferencia(rs.getString("lancamento.referencia"));
 				l.setData(rs.getDate("lancamento.data"));
 				l.setTotal(rs.getDouble("lancamento.total"));
+				l.setDesconto(rs.getDouble("lancamento.desconto"));
+				l.setAcrescimo(rs.getDouble("lancamento.acrescimo"));					
 		        l.setTipoPagamento(tp);
 				itens.add(l);
 			}			
