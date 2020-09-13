@@ -66,6 +66,10 @@ public class PagamentoDialogFormController implements Initializable{
 		@FXML
 		private Label lbTotal;
 		@FXML
+		private Label lbDespesa;
+		@FXML
+		private Label lbOutro;
+		@FXML
 		private TableView<Despesa> tbDespesa;
 		@FXML
 		private TableColumn<Despesa, Integer> colunaDespId;
@@ -115,13 +119,20 @@ public class PagamentoDialogFormController implements Initializable{
 		}
 		
 		public void onBtAtualizarTotal() {
-			double total= Utils.stringParaDouble(lbTotal.getText());
-			total -= Utils.stringParaDouble(txtDesconto.getText());
-			total += Utils.stringParaDouble(txtAcrescimo.getText());	
+			lbDespesa.setText(String.format("%.2f", lancamentoEntidade.getTotal()));
+			double total= lancamentoEntidade.getTotal();
+			if(Utils.stringParaDouble(txtDesconto.getText()) != 0) {
+				total -= Utils.stringParaDouble(txtDesconto.getText());
+				lbOutro.setText(String.format("%.2f",Utils.stringParaDouble(txtDesconto.getText())));
+				}
+			if(Utils.stringParaDouble(txtAcrescimo.getText()) != 0) {
+				total += Utils.stringParaDouble(txtAcrescimo.getText());
+				lbOutro.setText(String.format("%.2f",Utils.stringParaDouble(txtAcrescimo.getText())));		
+				}
 			lbTotal.setText(String.format("%.2f", total));
 			txtDesconto.setText(String.valueOf(0));
 			txtAcrescimo.setText(String.valueOf(0));
-		}
+					}
 		//-----------------------------------------------
 		
 		public void setDespesa(Despesa despesaEntidade) {
