@@ -19,33 +19,30 @@
                 </Menu>
                   <Menu mnemonicParsing="false" text="Lançamentos">
                     <items>
-                        <Menu mnemonicParsing="false" text="Cadastrar">
-                           <items>
-                            <MenuItem fx:id="menuItemLancamentoQuitado" mnemonicParsing="false" onAction="#onMenuItemLancamentoQuitado" text="Lançamento (Quitado)" />
-                              <Menu mnemonicParsing="false" text="Lançamento (A Pagar)">
-                                <items>
-                                  <MenuItem fx:id="menuItemLancamentoAPagar" mnemonicParsing="false" onAction="#onMenuItemLancamentoAPagar" text="Resumido" />
-                                    <MenuItem mnemonicParsing="false" text="Completo" />
-                                </items>
-                              </Menu>
-                           </items>
-                        </Menu>
-                        <Menu mnemonicParsing="false" text="Relatórios">
+                      <MenuItem fx:id="menuItemLancamentoQuitado" mnemonicParsing="false" onAction="#onMenuItemLancamentoQuitado" text="Lançamento (Quitado)" />
+                        <Menu mnemonicParsing="false" text="Lançamento (A Pagar)">
                           <items>
-                              <Menu mnemonicParsing="false" text="Contas Quitadas">
-                                <items>
-                                  <MenuItem fx:id="menuItemContasQuitadoMesAtual" mnemonicParsing="false" onAction="#onMenuItemContasQuitadoMesAtual" text="Mês Atual" />
-                                    <MenuItem fx:id="menuItemContasQuitadoTodos" mnemonicParsing="false" onAction="#onMenuItemContasQuitadoTodos" text="Todos" />
-                                </items>
-                              </Menu>
-                              <Menu mnemonicParsing="false" text="Contas A Pagar">
-                                <items>
-                                  <MenuItem fx:id="menuItemContasEmAbertoMesAtual" mnemonicParsing="false" onAction="#onMenuItemContasEmAbertoMesAtual" text="Mês Atual" />
-                                  <MenuItem fx:id="menuItemContasEmAbertoTodos" mnemonicParsing="false" onAction="#onMenuItemContasEmAbertoTodos" text="Todos" />
-                                </items>
-                              </Menu>
+                            <MenuItem fx:id="menuItemLancamentoAPagar" mnemonicParsing="false" onAction="#onMenuItemLancamentoAPagar" text="Resumido" />
+                              <MenuItem mnemonicParsing="false" text="Completo" />
                           </items>
                         </Menu>
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Financeiro">
+                    <items>
+                        <Menu mnemonicParsing="false" text="Contas Quitadas">
+                          <items>
+                            <MenuItem fx:id="menuItemContasQuitadoMesAtual" mnemonicParsing="false" onAction="#onMenuItemContasQuitadoMesAtual" text="Mês Atual" />
+                              <MenuItem fx:id="menuItemContasQuitadoTodos" mnemonicParsing="false" onAction="#onMenuItemContasQuitadoTodos" text="Todos" />
+                          </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Contas A Pagar">
+                          <items>
+                            <MenuItem fx:id="menuItemContasEmAbertoMesAtual" mnemonicParsing="false" onAction="#onMenuItemContasEmAbertoMesAtual" text="Mês Atual" />
+                            <MenuItem fx:id="menuItemContasEmAbertoTodos" mnemonicParsing="false" onAction="#onMenuItemContasEmAbertoTodos" text="Todos" />
+                          </items>
+                        </Menu>
+                      <MenuItem mnemonicParsing="false" text="Todas Contas" />
                     </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Cadastros">
